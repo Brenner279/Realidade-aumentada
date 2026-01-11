@@ -1,65 +1,35 @@
-<!DOCTYPE html>
-<html lang="pt-br">
-  <head>
-    <meta charset="utf-8" />
-    <title>AR com A-Frame + AR.js</title>
-    <!-- A-Frame -->
-    <script src="https://aframe.io/releases/1.5.0/aframe.min.js"></script>
-  
-  </head>
-  <body>
-<a-scene>
+<!doctype html>
+
+<html>
+
+<head>
+
+<title>L27 360° video</title>
+
+<script src="https://aframe.io/releases/8.7.1/aframe.min.js"></script>
+</head>
+
+<body>
+
+<a-scene
 
 <a-assets>
 
-  
+<video id="gaTurtles" src="vitoria.mp4" autoplay></video>
+
 </a-assets>
+
+<a-camera>
+
+<a-cursor></a-cursor>
+
+</a-camera>
+
+<a-videosphere src="#gsTurtles" rotation="8 -98 6"></a-videosphere>
+
 </a-scene>
-    
-    <!-- Cena A-Frame com AR.js -->
-    <a-scene
-      embedded
-      vr-mode-ui="enabled: false"
-      renderer="logarithmicDepthBuffer: true"
-      arjs="sourceType: webcam; detectionMode: mono_and_matrix; matrixCodeType: 3x3;"
-    >
-      <!-- Luz básica -->
-      <a-entity light="type: ambient; intensity: 0.8"></a-entity>
-      <a-entity light="type: directional; intensity: 0.6" position="1 1 0"></a-entity>
 
-      <!-- Marcador padrão 'hiro' -->
-      <a-marker type="pattern" url="https://raw.githubusercontent.com/AR-js-org/AR.js/master/aframe/examples/marker-training/examples/pattern-files/pattern-hiro.patt">
-        <!-- Conteúdo 3D sobre o marcador -->
-        <a-box
-          position="0 0.5 0"
-          rotation="0 45 0"
-          color="#4CC3D9"
-          depth="0.5"
-          height="0.5"
-          width="0.5"
-          shadow
-        ></a-box>
+</body>
 
-        <a-sphere
-          position="0.8 0.4 0"
-          radius="0.25"
-          color="#EF2D5E"
-          shadow
-        ></a-sphere>
-
-        <a-text
-          value="Olá, AR!"
-          position="0 1 0"
-          align="center"
-          color="#FFFFFF"
-          side="double"
-          scale="1 1 1"
-        ></a-text>
-      </a-marker>
-
-      <!-- Câmera AR -->
-      <a-entity camera></a-entity>
-    </a-scene>
-  </body>
 </html>
-
+  
