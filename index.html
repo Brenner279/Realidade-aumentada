@@ -1,41 +1,10 @@
 <!doctype html>
 <html>
 <head>
-  <title>L27 360° video com Botão</title>
+  <title>L27 360° Gaze Control</title>
   <script src="https://aframe.io/releases/1.7.1/aframe.min.js"></script>
-  
-  <style>
-    /* Estilo para deixar o botão flutuando sobre a cena */
-    #overlay {
-      position: absolute;
-      bottom: 20px;
-      left: 20px;
-      z-index: 9999; /* Garante que fique acima do 3D */
-    }
-
-    #btnPlay {
-      background-color: #EF2D5E;
-      color: white;
-      border: none;
-      padding: 15px 30px;
-      font-size: 18px;
-      border-radius: 5px;
-      cursor: pointer;
-      font-family: Arial, sans-serif;
-      opacity: 0.9;
-    }
-
-    #btnPlay:hover {
-      opacity: 1;
-    }
-  </style>
 </head>
 <body>
-
-  <div id="overlay">
-    <button id="btnPlay">Play Video</button>
-  </div>
-
   <a-scene>
     <a-assets>
       <video 
@@ -49,30 +18,59 @@
     </a-assets>
 
     <a-camera>
-      <a-cursor color="yellow"></a-cursor>
+      <a-cursor 
+        id="cursor"
+        color="yellow"
+        fuse="true" 
+        fuse-timeout="1500"
+        raycaster="objects: .clicavel" 
+        animation__fusing="property: scale; startEvents: fusing; from: 1 1 1; to: 0.1 0.1 0.1; dur: 1500"
+        animation__mouseleave="property: scale; startEvents: mouseleave; to: 1 1 1; dur: 500">
+      </a-cursor>
     </a-camera>
+
+    <a-entity position="0 1.6 -2">
+      <a-plane 
+        id="btnPlay"
+        class="clicavel" 
+        color="#EF2D5E" 
+        width="1.5" 
+        height="0.5" 
+        opacity="0.9">
+        
+        <a-text 
+          id="btnText" 
+          value="OLHE PARA TOCAR" 
+          align="center" 
+          width="4">
+        </a-text>
+
+      </a-plane>
+    </a-entity>
 
     <a-videosphere src="#gaTurtles" rotation="0 -90 0"></a-videosphere>
   </a-scene>
 
   <script>
-    // Selecionamos o vídeo e o botão pelo ID
     const video = document.getElementById('gaTurtles');
-    const btn = document.getElementById('btnPlay');
+    const botao = document.getElementById('btnPlay');
+    const texto = document.getElementById('btnText');
 
-    btn.addEventListener('click', function() {
+    // O evento 'click' é disparado automaticamente após o tempo do 'fuse'
+    botao.addEventListener('click', function() {
       if (video.paused) {
-        // Se estiver pausado, dá play e muda o texto do botão
         video.play();
-        btn.innerText = "Pause";
-        btn.style.backgroundColor = "#333"; // Muda cor para indicar pausa
+        // Muda a cor e texto para indicar que pode pausar
+        botao.setAttribute('color', '#333'); 
+        texto.setAttribute('value', 'OLHE PARA PAUSAR');
       } else {
-        // Se estiver tocando, pausa e muda o texto
         video.pause();
-        btn.innerText = "Play";
-        btn.style.backgroundColor = "#EF2D5E"; // Volta a cor original
+        // Volta a cor original
+        botao.setAttribute('color', '#EF2D5E');
+        texto.setAttribute('value', 'OLHE PARA TOCAR');
       }
     });
   </script>
 </body>
 </html>
+
