@@ -2,198 +2,325 @@
 <html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
-    <title>Urna e Dashboard Estatístico</title>
+    <title>Simulador de Urna Eletrônica</title>
     <style>
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background-color: #f0f2f5;
-            margin: 0;
-            padding: 20px;
+            font-family: Arial, sans-serif;
+            background-color: #e0e0e0;
             display: flex;
-            gap: 20px;
+            justify-content: center;
+            gap: 30px;
+            padding: 20px;
+            margin: 0;
             height: 90vh;
         }
 
-        /* Lado Esquerdo: URNA */
+        /* URNA ELETRÔNICA */
         .urna {
+            background-color: #dcdcdc;
+            border: 2px solid #999;
+            border-radius: 5px;
+            display: flex;
+            padding: 20px;
+            box-shadow: 5px 5px 15px rgba(0,0,0,0.3);
+            width: 700px;
+            gap: 20px;
+        }
+
+        /* Tela da Urna */
+        .tela {
+            background-color: #ecf0f1;
+            border: 2px solid #bdc3c7;
             flex: 1;
-            background: white;
-            border-radius: 10px;
-            padding: 30px;
-            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            padding: 20px;
             display: flex;
             flex-direction: column;
-            gap: 15px;
+            position: relative;
         }
 
-        .urna h2 { text-align: center; color: #333; }
-
-        .botao-voto {
-            padding: 20px;
-            font-size: 20px;
-            font-weight: bold;
-            color: white;
-            background-color: #2c3e50;
-            border: none;
-            border-radius: 8px;
-            cursor: pointer;
-            transition: background 0.3s, transform 0.1s;
-        }
-
-        .botao-voto:hover { background-color: #1a252f; }
-        .botao-voto:active { transform: scale(0.98); }
-
-        .botao-zerar {
-            margin-top: auto;
-            padding: 15px;
-            background-color: #e74c3c;
-            color: white;
-            border: none;
-            border-radius: 5px;
-            font-size: 16px;
-            cursor: pointer;
-        }
-
-        /* Lado Direito: DASHBOARD */
-        .dashboard {
-            flex: 1;
-            background: white;
-            border-radius: 10px;
-            padding: 30px;
-            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-        }
-
-        .dashboard h2 { text-align: center; color: #333; }
-        .total-votos { text-align: center; font-size: 18px; color: #666; margin-bottom: 30px; }
-
-        /* Barras Estatísticas */
-        .candidato-stats { margin-bottom: 25px; }
+        .tela-topo { font-size: 20px; font-weight: bold; margin-bottom: 20px; }
         
-        .info-candidato {
-            display: flex;
-            justify-content: space-between;
-            margin-bottom: 5px;
-            font-weight: bold;
-            color: #444;
+        .numero-container { display: flex; gap: 10px; margin-bottom: 20px; }
+        .caixa-numero {
+            width: 40px; height: 50px;
+            border: 2px solid #333;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 30px; font-weight: bold;
         }
 
-        .barra-fundo {
-            width: 100%;
-            height: 30px;
-            background-color: #e0e0e0;
+        .info-candidato { font-size: 22px; flex: 1; }
+        .foto-candidato {
+            position: absolute; right: 20px; top: 20px;
+            width: 120px; height: 160px;
+            border: 2px solid #333;
+            background-color: #ccc; /* Fundo caso não tenha foto */
+            background-size: cover;
+            background-position: center;
+            display: none; /* Escondido até digitar o número */
+        }
+
+        .instrucoes {
+            border-top: 2px solid #333;
+            padding-top: 10px;
+            font-size: 14px;
+        }
+
+        /* Teclado da Urna */
+        .lateral-teclado {
+            background-color: #2c3e50;
+            padding: 20px;
             border-radius: 5px;
-            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            width: 250px;
         }
 
-        .barra-preenchimento {
-            height: 100%;
-            background-color: #3498db;
-            width: 0%; /* Inicia em zero */
-            transition: width 0.5s ease-out; /* Animação fluida */
+        .teclado-numerico {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 15px;
+            margin-bottom: 20px;
         }
+
+        .tecla {
+            background-color: #1a1a1a;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            width: 60px; height: 50px;
+            font-size: 20px; font-weight: bold;
+            cursor: pointer;
+            box-shadow: 2px 2px 5px rgba(0,0,0,0.5);
+        }
+        .tecla:active { transform: translateY(2px); box-shadow: none; }
+
+        .teclas-acao { display: flex; gap: 10px; width: 100%; justify-content: center; }
+        .btn-acao {
+            border: none; border-radius: 3px;
+            font-size: 12px; font-weight: bold; text-transform: uppercase;
+            cursor: pointer; padding: 10px; box-shadow: 2px 2px 5px rgba(0,0,0,0.5);
+        }
+        .btn-acao:active { transform: translateY(2px); box-shadow: none; }
+        
+        .btn-branco { background-color: white; color: black; }
+        .btn-corrige { background-color: #e67e22; color: black; }
+        .btn-confirma { background-color: #2ecc71; color: black; height: 60px; margin-top: -10px; }
+
+        /* DASHBOARD */
+        .dashboard {
+            background: white; border-radius: 10px; padding: 30px;
+            width: 400px; box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+        
+        .dashboard h2 { text-align: center; margin-top: 0; }
+        .resumo-votos { text-align: center; margin-bottom: 20px; font-weight: bold; }
+
+        .barra-container { margin-bottom: 15px; }
+        .barra-info { display: flex; justify-content: space-between; font-size: 14px; margin-bottom: 5px; font-weight: bold;}
+        .barra-fundo { width: 100%; height: 25px; background-color: #eee; border-radius: 4px; overflow: hidden; }
+        .barra-preenchimento { height: 100%; width: 0%; transition: width 0.5s; }
+
     </style>
 </head>
 <body>
 
-    <!-- Interface da Urna -->
+    <!-- LADO ESQUERDO: URNA -->
     <div class="urna">
-        <h2>🗳️ Urna de Votação</h2>
-        
-        <!-- Botões chamam a função votar(id_do_candidato) no JavaScript -->
-        <button class="botao-voto" onclick="votar(1)">Opção A: Mais Tecnologia</button>
-        <button class="botao-voto" onclick="votar(2)">Opção B: Feiras Culturais</button>
-        <button class="botao-voto" onclick="votar(3)">Opção C: Torneios Esportivos</button>
-        
-        <button class="botao-zerar" onclick="zerarUrna()">Zerar Urna (Apenas Admin)</button>
+        <div class="tela">
+            <div class="tela-topo">SEU VOTO PARA:<br>PROJETO ESCOLAR</div>
+            
+            <div class="numero-container">
+                <div class="caixa-numero" id="num1"></div>
+                <div class="caixa-numero" id="num2"></div>
+            </div>
+
+            <div class="info-candidato" id="info-nome"></div>
+            
+            <div class="foto-candidato" id="foto-cand"></div>
+
+            <div class="instrucoes" id="instrucoes" style="display: none;">
+                Aperte a tecla:<br>
+                VERDE para CONFIRMAR<br>
+                LARANJA para CORRIGIR
+            </div>
+        </div>
+
+        <div class="lateral-teclado">
+            <div class="teclado-numerico">
+                <button class="tecla" onclick="digitar(1)">1</button>
+                <button class="tecla" onclick="digitar(2)">2</button>
+                <button class="tecla" onclick="digitar(3)">3</button>
+                <button class="tecla" onclick="digitar(4)">4</button>
+                <button class="tecla" onclick="digitar(5)">5</button>
+                <button class="tecla" onclick="digitar(6)">6</button>
+                <button class="tecla" onclick="digitar(7)">7</button>
+                <button class="tecla" onclick="digitar(8)">8</button>
+                <button class="tecla" onclick="digitar(9)">9</button>
+                <div></div>
+                <button class="tecla" onclick="digitar(0)">0</button>
+                <div></div>
+            </div>
+            <div class="teclas-acao">
+                <button class="btn-acao btn-branco" onclick="branco()">Branco</button>
+                <button class="btn-acao btn-corrige" onclick="corrige()">Corrige</button>
+                <button class="btn-acao btn-confirma" onclick="confirma()">Confirma</button>
+            </div>
+        </div>
     </div>
 
-    <!-- Interface do Dashboard -->
+    <!-- LADO DIREITO: DASHBOARD -->
     <div class="dashboard">
-        <h2>📊 Dashboard Estatístico</h2>
-        <div class="total-votos" id="texto-total">Total de Votos: 0</div>
+        <h2>📊 Apuração em Tempo Real</h2>
+        <div class="resumo-votos" id="texto-total">Votos Totais: 0 | Votos Válidos: 0</div>
 
-        <!-- Estatísticas Opção A -->
-        <div class="candidato-stats">
-            <div class="info-candidato">
-                <span>Opção A</span>
-                <span id="texto-cand1">0 votos (0%)</span>
-            </div>
-            <div class="barra-fundo">
-                <div class="barra-preenchimento" id="barra-cand1" style="background-color: #3498db;"></div>
-            </div>
-        </div>
-
-        <!-- Estatísticas Opção B -->
-        <div class="candidato-stats">
-            <div class="info-candidato">
-                <span>Opção B</span>
-                <span id="texto-cand2">0 votos (0%)</span>
-            </div>
-            <div class="barra-fundo">
-                <div class="barra-preenchimento" id="barra-cand2" style="background-color: #2ecc71;"></div>
-            </div>
-        </div>
-
-        <!-- Estatísticas Opção C -->
-        <div class="candidato-stats">
-            <div class="info-candidato">
-                <span>Opção C</span>
-                <span id="texto-cand3">0 votos (0%)</span>
-            </div>
-            <div class="barra-fundo">
-                <div class="barra-preenchimento" id="barra-cand3" style="background-color: #f1c40f;"></div>
-            </div>
+        <div id="graficos">
+            <!-- Barras injetadas via JavaScript -->
         </div>
     </div>
 
-    <!-- A Mágica Matemática: JavaScript -->
     <script>
-        // Variáveis para armazenar as frequências absolutas
-        let votos = {
-            1: 0,
-            2: 0,
-            3: 0
+        // 1. CONFIGURAÇÃO DOS CANDIDATOS
+        // Para adicionar a foto, coloque a imagem na mesma pasta do arquivo HTML e coloque o nome do arquivo em 'foto'
+        let candidatos = {
+            "10": { nome: "Tecnologia e Realidade Virtual", foto: "cand10.jpg", cor: "#3498db", votos: 0 },
+            "20": { nome: "Cultura e História do Amapá", foto: "cand20.jpg", cor: "#2ecc71", votos: 0 },
+            "30": { nome: "Feira de Ciências da Natureza", foto: "cand30.jpg", cor: "#9b59b6", votos: 0 }
         };
-        let totalDeVotos = 0;
+        
+        let votosBrancos = 0;
+        let votosNulos = 0;
 
-        function votar(candidatoId) {
-            // Incrementa o voto do candidato e o total geral
-            votos[candidatoId]++;
-            totalDeVotos++;
-            atualizarDashboard();
-        }
+        // Controle da tela
+        let numeroDigitado = "";
+        let votoEmBranco = false;
 
-        function atualizarDashboard() {
-            // Atualiza o texto do total geral
-            document.getElementById('texto-total').innerText = "Total de Votos: " + totalDeVotos;
+        // 2. FUNÇÕES DA URNA
+        function atualizarTela() {
+            let num1 = document.getElementById('num1');
+            let num2 = document.getElementById('num2');
+            let infoNome = document.getElementById('info-nome');
+            let divFoto = document.getElementById('foto-cand');
+            let instrucoes = document.getElementById('instrucoes');
 
-            // Laço de repetição para atualizar cada uma das 3 barras
-            for (let i = 1; i <= 3; i++) {
-                let votosCandidato = votos[i];
+            num1.innerText = numeroDigitado[0] || "";
+            num2.innerText = numeroDigitado[1] || "";
+
+            if (votoEmBranco) {
+                infoNome.innerHTML = "<br><br><strong>VOTO EM BRANCO</strong>";
+                instrucoes.style.display = "block";
+                divFoto.style.display = "none";
+                return;
+            }
+
+            if (numeroDigitado.length === 2) {
+                instrucoes.style.display = "block";
+                let cand = candidatos[numeroDigitado];
                 
-                // Evita erro matemático de divisão por zero antes do primeiro voto
-                let frequenciaRelativa = 0;
-                if (totalDeVotos > 0) {
-                    // Cálculo da porcentagem (frequência relativa): (parte / todo) * 100
-                    frequenciaRelativa = (votosCandidato / totalDeVotos) * 100;
+                if (cand) {
+                    infoNome.innerHTML = "Nome: <strong>" + cand.nome + "</strong>";
+                    divFoto.style.backgroundImage = "url('" + cand.foto + "')";
+                    divFoto.style.display = "block";
+                } else {
+                    infoNome.innerHTML = "<br><br><strong>NÚMERO ERRADO</strong><br>VOTO NULO";
+                    divFoto.style.display = "none";
                 }
-
-                // Atualiza o texto com a Frequência Absoluta e a Relativa formatada
-                document.getElementById('texto-cand' + i).innerText = 
-                    votosCandidato + " votos (" + frequenciaRelativa.toFixed(1) + "%)";
-
-                // Atualiza a largura visual da barra no CSS
-                document.getElementById('barra-cand' + i).style.width = frequenciaRelativa + "%";
+            } else {
+                infoNome.innerHTML = "";
+                instrucoes.style.display = "none";
+                divFoto.style.display = "none";
             }
         }
 
-        function zerarUrna() {
-            if(confirm("Tem certeza que deseja zerar todos os votos?")) {
-                votos = { 1: 0, 2: 0, 3: 0 };
-                totalDeVotos = 0;
+        function digitar(n) {
+            if (numeroDigitado.length < 2 && !votoEmBranco) {
+                numeroDigitado += n;
+                atualizarTela();
+            }
+        }
+
+        function branco() {
+            if (numeroDigitado === "") {
+                votoEmBranco = true;
+                atualizarTela();
+            }
+        }
+
+        function corrige() {
+            numeroDigitado = "";
+            votoEmBranco = false;
+            atualizarTela();
+        }
+
+        function confirma() {
+            if (numeroDigitado.length === 2 || votoEmBranco) {
+                // Registra o voto
+                if (votoEmBranco) {
+                    votosBrancos++;
+                } else if (candidatos[numeroDigitado]) {
+                    candidatos[numeroDigitado].votos++;
+                } else {
+                    votosNulos++;
+                }
+                
+                // Toca um 'beep' simulado se quiser, limpa a tela e atualiza gráfico
+                corrige();
                 atualizarDashboard();
             }
         }
+
+        // 3. FUNÇÕES DO DASHBOARD (A Matemática)
+        function atualizarDashboard() {
+            let container = document.getElementById('graficos');
+            container.innerHTML = ""; // Limpa para desenhar novamente
+
+            let votosValidos = 0;
+            let totalGeral = votosBrancos + votosNulos;
+
+            // Soma os válidos
+            for (let num in candidatos) {
+                votosValidos += candidatos[num].votos;
+                totalGeral += candidatos[num].votos;
+            }
+
+            document.getElementById('texto-total').innerText = 
+                "Votos Totais: " + totalGeral + " | Votos Válidos: " + votosValidos;
+
+            // Desenha a barra de cada candidato
+            for (let num in candidatos) {
+                let cand = candidatos[num];
+                let porcentagem = 0;
+                
+                // CÁLCULO ESTATÍSTICO: Porcentagem baseada apenas nos Válidos (regra TSE)
+                if (votosValidos > 0) {
+                    porcentagem = (cand.votos / votosValidos) * 100;
+                }
+
+                container.innerHTML += `
+                    <div class="barra-container">
+                        <div class="barra-info">
+                            <span>${num} - ${cand.nome}</span>
+                            <span>${cand.votos} votos (${porcentagem.toFixed(1)}%)</span>
+                        </div>
+                        <div class="barra-fundo">
+                            <div class="barra-preenchimento" style="width: ${porcentagem}%; background-color: ${cand.cor};"></div>
+                        </div>
+                    </div>
+                `;
+            }
+
+            // Adiciona resumo de Brancos e Nulos no final
+            container.innerHTML += `
+                <hr style="border: 1px solid #eee; margin: 20px 0;">
+                <div style="font-size: 14px; color: #666;">
+                    Votos Nulos: <strong>${votosNulos}</strong><br>
+                    Votos em Branco: <strong>${votosBrancos}</strong>
+                </div>
+            `;
+        }
+
+        // Desenha o gráfico vazio ao abrir a tela
+        atualizarDashboard();
     </script>
 </body>
 </html>
