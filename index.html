@@ -7,7 +7,7 @@
         /* ESTILOS GERAIS */
         body {
             font-family: Arial, sans-serif;
-            background-color: #2c3e50; /* Fundo escuro para destacar a urna */
+            background-color: #2c3e50;
             display: flex;
             justify-content: center;
             align-items: flex-start;
@@ -19,7 +19,7 @@
 
         /* 1. CARCAÇA DA URNA OFICIAL */
         .urna-oficial {
-            background-color: #e4e6e5; /* Cinza claro da urna */
+            background-color: #e4e6e5;
             border-radius: 10px;
             padding: 25px 30px 40px 30px;
             display: flex;
@@ -30,7 +30,6 @@
             border: 1px solid #ccc;
         }
 
-        /* Detalhes da parte inferior da urna (ranhuras) */
         .urna-oficial::after {
             content: "";
             position: absolute;
@@ -53,7 +52,6 @@
             position: relative;
         }
 
-        /* Tela Inicial e FIM */
         .tela-mensagem-central {
             display: flex;
             flex-direction: column;
@@ -66,7 +64,6 @@
         .logo-justica { width: 150px; margin-bottom: 20px; }
         .titulo-justica { font-size: 24px; font-weight: bold; color: #333; }
 
-        /* Elementos da Tela de Votação */
         .topo-tela { font-size: 16px; font-weight: bold; display: none; }
         .cargo { font-size: 24px; font-weight: bold; text-align: center; margin: 15px 0; display: none; }
         
@@ -83,7 +80,6 @@
 
         .texto-info { font-size: 18px; margin-bottom: 5px; line-height: 1.5; }
         
-        /* Foto do Candidato */
         .foto-container {
             width: 110px; height: 150px;
             border: 2px solid #111;
@@ -105,79 +101,48 @@
         }
 
         /* 3. TECLADO (Lado Direito) */
-        .painel-direito {
-            width: 250px;
-            display: flex;
-            flex-direction: column;
-        }
+        .painel-direito { width: 250px; display: flex; flex-direction: column; }
 
         .cabecalho-teclado {
-            display: flex;
-            align-items: center;
-            justify-content: flex-end;
-            margin-bottom: 20px;
-            font-family: 'Times New Roman', serif;
-            font-size: 16px;
-            font-weight: bold;
+            display: flex; align-items: center; justify-content: flex-end;
+            margin-bottom: 20px; font-family: 'Times New Roman', serif;
+            font-size: 16px; font-weight: bold;
         }
 
         .teclado-fundo {
-            background-color: #1e1e1e;
-            padding: 25px 20px;
-            border-radius: 5px;
-            box-shadow: inset 0 0 10px #000;
+            background-color: #1e1e1e; padding: 25px 20px;
+            border-radius: 5px; box-shadow: inset 0 0 10px #000;
         }
 
         .teclado-numeros {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 15px;
-            margin-bottom: 20px;
-            justify-items: center;
+            display: grid; grid-template-columns: repeat(3, 1fr);
+            gap: 15px; margin-bottom: 20px; justify-items: center;
         }
 
         .tecla-num {
-            background-color: #111;
-            color: #fff;
-            border: none;
-            border-radius: 3px;
-            width: 45px; height: 35px;
-            font-size: 18px; font-weight: bold;
-            cursor: pointer;
-            box-shadow: 2px 3px 0px #000;
-            position: relative;
+            background-color: #111; color: #fff; border: none; border-radius: 3px;
+            width: 45px; height: 35px; font-size: 18px; font-weight: bold;
+            cursor: pointer; box-shadow: 2px 3px 0px #000; position: relative;
         }
         .tecla-num:active { top: 3px; box-shadow: 0px 0px 0px #000; }
-        
-        /* Letrinhas nas teclas */
         .tecla-num span { font-size: 9px; display: block; margin-top: -2px; color: #888;}
 
-        .linha-zero {
-            display: flex; justify-content: center; margin-bottom: 25px;
-        }
+        .linha-zero { display: flex; justify-content: center; margin-bottom: 25px; }
 
-        .teclas-acao {
-            display: flex;
-            gap: 10px;
-            align-items: flex-end; /* Para alinhar o confirma que é maior */
-        }
+        .teclas-acao { display: flex; gap: 10px; align-items: flex-end; }
 
         .btn-acao {
-            border: none; border-radius: 3px;
-            font-size: 11px; font-weight: bold;
-            cursor: pointer; padding: 10px 5px;
-            box-shadow: 2px 3px 0px rgba(0,0,0,0.8);
-            position: relative;
-            text-transform: uppercase;
-            flex: 1;
+            border: none; border-radius: 3px; font-size: 11px; font-weight: bold;
+            cursor: pointer; padding: 10px 5px; box-shadow: 2px 3px 0px rgba(0,0,0,0.8);
+            position: relative; text-transform: uppercase; flex: 1;
         }
         .btn-acao:active { top: 3px; box-shadow: 0px 0px 0px #000; }
 
         .btn-branco { background-color: #fff; color: #000; }
         .btn-corrige { background-color: #e67e22; color: #000; }
-        .btn-confirma { background-color: #2ecc71; color: #000; height: 50px; font-size: 12px;} /* Maior que as outras */
+        .btn-confirma { background-color: #2ecc71; color: #000; height: 50px; font-size: 12px;}
 
-        /* 4. DASHBOARD (Oculto no início) */
+        /* 4. DASHBOARD */
         .dashboard {
             background: white; border-radius: 10px; padding: 30px;
             width: 400px; box-shadow: 0 10px 20px rgba(0,0,0,0.3);
@@ -187,26 +152,27 @@
         .dashboard h2 { text-align: center; margin-top: 0; color: #333; }
         
         #mensagem-espera {
-            text-align: center; color: #7f8c8d; font-style: italic; margin-top: 50px;
+            text-align: center; color: #7f8c8d; margin-top: 50px;
+            font-size: 16px; line-height: 1.5;
         }
 
-        #conteudo-grafico { display: none; /* Só aparece após o primeiro voto */ }
+        #conteudo-grafico { display: none; /* Inicia Oculto */ }
         
         .resumo-votos { text-align: center; margin-bottom: 20px; font-weight: bold; color: #2c3e50; }
 
         .barra-container { margin-bottom: 15px; }
         .barra-info { display: flex; justify-content: space-between; font-size: 14px; margin-bottom: 5px; font-weight: bold;}
         .barra-fundo { width: 100%; height: 25px; background-color: #eee; border-radius: 4px; overflow: hidden; }
-        .barra-preenchimento { height: 100%; width: 0%; transition: width 0.8s ease-in-out; }
+        
+        /* Adicionada a transição para a barra crescer animada */
+        .barra-preenchimento { height: 100%; width: 0%; transition: width 1s cubic-bezier(0.1, 0.7, 0.1, 1); }
 
     </style>
 </head>
 <body>
 
     <div class="urna-oficial">
-        
         <div class="tela-container" id="tela">
-            
             <div class="tela-mensagem-central" id="tela-inicio">
                 <img src="brasao.png" alt="Brasão" class="logo-justica" onerror="this.style.display='none'">
                 <div class="titulo-justica">JUSTIÇA ELEITORAL</div>
@@ -273,7 +239,9 @@
         <h2>📊 Apuração em Tempo Real</h2>
         
         <div id="mensagem-espera">
-            Aguardando a confirmação do primeiro voto...
+            🔒 <strong>Sigilo do Voto</strong><br><br>
+            A apuração está temporariamente oculta para não influenciar a sua escolha.<br><br>
+            <em>Os gráficos aparecerão assim que você confirmar o voto.</em>
         </div>
 
         <div id="conteudo-grafico">
@@ -283,7 +251,6 @@
     </div>
 
     <script>
-        // --- BASE DE DADOS DOS CANDIDATOS ---
         let candidatos = {
             "10": { nome: "Tecnologia e RV", turma: "Equipe Alpha", foto: "cand10.jpg", cor: "#3498db", votos: 0 },
             "20": { nome: "Cultura do Amapá", turma: "Equipe Beta", foto: "cand20.jpg", cor: "#2ecc71", votos: 0 },
@@ -294,13 +261,10 @@
         let votosNulos = 0;
         let totalGeralDeVotos = 0;
 
-        // --- CONTROLE DE TELA ---
         let numeroDigitado = "";
         let votoEmBranco = false;
-        let etapaAtual = 'INICIO'; // INICIO, VOTANDO, FIM
+        let etapaAtual = 'INICIO';
 
-        // --- SINTETIZADOR DE ÁUDIO (BEEP DA URNA) ---
-        // Cria o som sem precisar de arquivo de áudio MP3
         function tocarSom(tipo) {
             try {
                 const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
@@ -313,29 +277,26 @@
                 
                 if (tipo === 'tecla') {
                     oscillator.frequency.value = 1200;
-                    gainNode.gain.setValueAtTime(0.05, audioCtx.currentTime); // Volume baixo
+                    gainNode.gain.setValueAtTime(0.05, audioCtx.currentTime);
                     oscillator.start();
-                    oscillator.stop(audioCtx.currentTime + 0.05); // Curto
+                    oscillator.stop(audioCtx.currentTime + 0.05);
                 } else if (tipo === 'confirma') {
                     oscillator.frequency.value = 1800;
-                    gainNode.gain.setValueAtTime(0.1, audioCtx.currentTime); // Volume mais alto
+                    gainNode.gain.setValueAtTime(0.1, audioCtx.currentTime);
                     oscillator.start();
-                    oscillator.stop(audioCtx.currentTime + 1.2); // Longo "PIIIIIIII"
+                    oscillator.stop(audioCtx.currentTime + 1.2);
                 }
             } catch (e) {
                 console.log("Áudio não suportado no navegador");
             }
         }
 
-        // --- LÓGICA DO TECLADO ---
         function digitar(n) {
             tocarSom('tecla');
-            
             if (etapaAtual === 'INICIO') {
                 etapaAtual = 'VOTANDO';
                 prepararTelaVotacao();
             }
-
             if (etapaAtual === 'VOTANDO' && numeroDigitado.length < 2 && !votoEmBranco) {
                 numeroDigitado += n;
                 atualizarTela();
@@ -363,10 +324,8 @@
 
         function confirma() {
             if (etapaAtual === 'VOTANDO') {
-                // Só confirma se digitou 2 números ou votou em branco
                 if (numeroDigitado.length === 2 || votoEmBranco) {
                     
-                    // Contabiliza o voto
                     if (votoEmBranco) {
                         votosBrancos++;
                     } else if (candidatos[numeroDigitado]) {
@@ -376,15 +335,12 @@
                     }
                     
                     totalGeralDeVotos++;
-                    
-                    // Som longo, mostra FIM e atualiza Dashboard
                     tocarSom('confirma');
                     mostrarFim();
                 }
             }
         }
 
-        // --- ATUALIZAÇÃO DA TELA DA URNA ---
         function prepararTelaVotacao() {
             document.getElementById('tela-inicio').style.display = 'none';
             document.getElementById('t-topo').style.display = 'block';
@@ -413,7 +369,6 @@
                 return;
             }
 
-            // Quando digita os 2 números, mostra a foto
             if (numeroDigitado.length === 2) {
                 instrucoes.style.display = 'block';
                 let cand = candidatos[numeroDigitado];
@@ -432,46 +387,45 @@
         function mostrarFim() {
             etapaAtual = 'FIM';
             
-            // Esconde tudo e mostra o FIM
+            // Esconde urna e mostra FIM
             document.getElementById('t-topo').style.display = 'none';
             document.getElementById('t-cargo').style.display = 'none';
             document.getElementById('t-dados').style.display = 'none';
             document.getElementById('instrucoes').style.display = 'none';
             document.getElementById('tela-fim').style.display = 'flex';
 
-            // ATUALIZA O GRÁFICO AGORA QUE O VOTO FOI CONFIRMADO
+            // REVELA O DASHBOARD
+            document.getElementById('mensagem-espera').style.display = 'none';
+            document.getElementById('conteudo-grafico').style.display = 'block';
             atualizarDashboard();
 
-            // Espera 2.5 segundos e reinicia a urna para o próximo eleitor
+            // Aumentei o tempo para 5 segundos (5000 milissegundos) para as pessoas conseguirem ver o resultado
             setTimeout(function() {
+                // Reseta a Urna
                 document.getElementById('tela-fim').style.display = 'none';
                 document.getElementById('tela-inicio').style.display = 'flex';
                 numeroDigitado = "";
                 votoEmBranco = false;
                 etapaAtual = 'INICIO';
-                // Reseta visual das caixas
                 document.getElementById('num1').innerText = "";
                 document.getElementById('num2').innerText = "";
                 document.getElementById('info-nome').innerHTML = "";
                 document.getElementById('info-turma').innerHTML = "";
                 document.getElementById('foto-cand').style.display = 'none';
-            }, 2500);
+                
+                // ESCONDE O DASHBOARD NOVAMENTE PARA O PRÓXIMO ELEITOR
+                document.getElementById('conteudo-grafico').style.display = 'none';
+                document.getElementById('mensagem-espera').style.display = 'block';
+
+            }, 5000); 
         }
 
-        // --- LÓGICA DO DASHBOARD (A MÁGICA ESTÁTÍSTICA) ---
         function atualizarDashboard() {
-            // Remove a mensagem de espera e mostra os gráficos
-            if (totalGeralDeVotos > 0) {
-                document.getElementById('mensagem-espera').style.display = 'none';
-                document.getElementById('conteudo-grafico').style.display = 'block';
-            }
-
             let container = document.getElementById('graficos');
             container.innerHTML = ""; 
 
             let votosValidos = 0;
 
-            // Soma os votos válidos
             for (let num in candidatos) {
                 votosValidos += candidatos[num].votos;
             }
@@ -479,14 +433,10 @@
             document.getElementById('texto-total').innerText = 
                 "Total de Votos (Urna): " + totalGeralDeVotos + " | Válidos: " + votosValidos;
 
-            // Desenha as barras
+            // Prepara as barras com largura 0% para a animação funcionar
             for (let num in candidatos) {
                 let cand = candidatos[num];
-                let porcentagem = 0;
-                
-                if (votosValidos > 0) {
-                    porcentagem = (cand.votos / votosValidos) * 100;
-                }
+                let porcentagem = (votosValidos > 0) ? (cand.votos / votosValidos) * 100 : 0;
 
                 container.innerHTML += `
                     <div class="barra-container">
@@ -495,13 +445,12 @@
                             <span>${cand.votos} votos (${porcentagem.toFixed(1)}%)</span>
                         </div>
                         <div class="barra-fundo">
-                            <div class="barra-preenchimento" style="width: ${porcentagem}%; background-color: ${cand.cor};"></div>
+                            <div class="barra-preenchimento" id="barra-${num}" style="width: 0%; background-color: ${cand.cor};"></div>
                         </div>
                     </div>
                 `;
             }
 
-            // Mostra Brancos e Nulos embaixo
             container.innerHTML += `
                 <hr style="border: 1px solid #eee; margin: 20px 0;">
                 <div style="font-size: 14px; color: #666; display: flex; justify-content: space-around;">
@@ -509,6 +458,16 @@
                     <span>Votos em Branco: <strong>${votosBrancos}</strong></span>
                 </div>
             `;
+
+            // Pequeno atraso para o navegador registrar o 0% antes de crescer a barra (Gatilho da Animação)
+            setTimeout(() => {
+                for (let num in candidatos) {
+                    let cand = candidatos[num];
+                    let porcentagem = (votosValidos > 0) ? (cand.votos / votosValidos) * 100 : 0;
+                    let barra = document.getElementById('barra-' + num);
+                    if (barra) barra.style.width = porcentagem + '%';
+                }
+            }, 50);
         }
     </script>
 </body>
