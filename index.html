@@ -1,76 +1,199 @@
-<!doctype html>
-<html>
+<!DOCTYPE html>
+<html lang="pt-BR">
 <head>
-  <title>L27 360° Gaze Control</title>
-  <script src="https://aframe.io/releases/1.7.1/aframe.min.js"></script>
+    <meta charset="UTF-8">
+    <title>Urna e Dashboard Estatístico</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f0f2f5;
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            gap: 20px;
+            height: 90vh;
+        }
+
+        /* Lado Esquerdo: URNA */
+        .urna {
+            flex: 1;
+            background: white;
+            border-radius: 10px;
+            padding: 30px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .urna h2 { text-align: center; color: #333; }
+
+        .botao-voto {
+            padding: 20px;
+            font-size: 20px;
+            font-weight: bold;
+            color: white;
+            background-color: #2c3e50;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background 0.3s, transform 0.1s;
+        }
+
+        .botao-voto:hover { background-color: #1a252f; }
+        .botao-voto:active { transform: scale(0.98); }
+
+        .botao-zerar {
+            margin-top: auto;
+            padding: 15px;
+            background-color: #e74c3c;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+
+        /* Lado Direito: DASHBOARD */
+        .dashboard {
+            flex: 1;
+            background: white;
+            border-radius: 10px;
+            padding: 30px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+
+        .dashboard h2 { text-align: center; color: #333; }
+        .total-votos { text-align: center; font-size: 18px; color: #666; margin-bottom: 30px; }
+
+        /* Barras Estatísticas */
+        .candidato-stats { margin-bottom: 25px; }
+        
+        .info-candidato {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 5px;
+            font-weight: bold;
+            color: #444;
+        }
+
+        .barra-fundo {
+            width: 100%;
+            height: 30px;
+            background-color: #e0e0e0;
+            border-radius: 5px;
+            overflow: hidden;
+        }
+
+        .barra-preenchimento {
+            height: 100%;
+            background-color: #3498db;
+            width: 0%; /* Inicia em zero */
+            transition: width 0.5s ease-out; /* Animação fluida */
+        }
+    </style>
 </head>
 <body>
-  <a-scene>
-    <a-assets>
-      <video 
-        id="gaTurtles" 
-        src="vitoria.mp4" 
-        loop 
-        crossorigin="anonymous"
-        playsinline
-        webkit-playsinline>
-      </video>
-    </a-assets>
 
-    <a-camera>
-      <a-cursor 
-        id="cursor"
-        color="yellow"
-        fuse="true" 
-        fuse-timeout="1500"
-        raycaster="objects: .clicavel" 
-        animation__fusing="property: scale; startEvents: fusing; from: 1 1 1; to: 0.1 0.1 0.1; dur: 1500"
-        animation__mouseleave="property: scale; startEvents: mouseleave; to: 1 1 1; dur: 500">
-      </a-cursor>
-    </a-camera>
-
-    <a-entity position="0 1.6 -2">
-      <a-plane 
-        id="btnPlay"
-        class="clicavel" 
-        color="#EF2D5E" 
-        width="1.5" 
-        height="0.5" 
-        opacity="0.9">
+    <!-- Interface da Urna -->
+    <div class="urna">
+        <h2>🗳️ Urna de Votação</h2>
         
-        <a-text 
-          id="btnText" 
-          value="OLHE PARA TOCAR" 
-          align="center" 
-          width="4">
-        </a-text>
+        <!-- Botões chamam a função votar(id_do_candidato) no JavaScript -->
+        <button class="botao-voto" onclick="votar(1)">Opção A: Mais Tecnologia</button>
+        <button class="botao-voto" onclick="votar(2)">Opção B: Feiras Culturais</button>
+        <button class="botao-voto" onclick="votar(3)">Opção C: Torneios Esportivos</button>
+        
+        <button class="botao-zerar" onclick="zerarUrna()">Zerar Urna (Apenas Admin)</button>
+    </div>
 
-      </a-plane>
-    </a-entity>
+    <!-- Interface do Dashboard -->
+    <div class="dashboard">
+        <h2>📊 Dashboard Estatístico</h2>
+        <div class="total-votos" id="texto-total">Total de Votos: 0</div>
 
-    <a-videosphere src="#gaTurtles" rotation="0 -90 0"></a-videosphere>
-  </a-scene>
+        <!-- Estatísticas Opção A -->
+        <div class="candidato-stats">
+            <div class="info-candidato">
+                <span>Opção A</span>
+                <span id="texto-cand1">0 votos (0%)</span>
+            </div>
+            <div class="barra-fundo">
+                <div class="barra-preenchimento" id="barra-cand1" style="background-color: #3498db;"></div>
+            </div>
+        </div>
 
-  <script>
-    const video = document.getElementById('gaTurtles');
-    const botao = document.getElementById('btnPlay');
-    const texto = document.getElementById('btnText');
+        <!-- Estatísticas Opção B -->
+        <div class="candidato-stats">
+            <div class="info-candidato">
+                <span>Opção B</span>
+                <span id="texto-cand2">0 votos (0%)</span>
+            </div>
+            <div class="barra-fundo">
+                <div class="barra-preenchimento" id="barra-cand2" style="background-color: #2ecc71;"></div>
+            </div>
+        </div>
 
-    // O evento 'click' é disparado automaticamente após o tempo do 'fuse'
-    botao.addEventListener('click', function() {
-      if (video.paused) {
-        video.play();
-        // Muda a cor e texto para indicar que pode pausar
-        botao.setAttribute('color', '#333'); 
-        texto.setAttribute('value', 'OLHE PARA PAUSAR');
-      } else {
-        video.pause();
-        // Volta a cor original
-        botao.setAttribute('color', '#EF2D5E');
-        texto.setAttribute('value', 'OLHE PARA TOCAR');
-      }
-    });
-  </script>
+        <!-- Estatísticas Opção C -->
+        <div class="candidato-stats">
+            <div class="info-candidato">
+                <span>Opção C</span>
+                <span id="texto-cand3">0 votos (0%)</span>
+            </div>
+            <div class="barra-fundo">
+                <div class="barra-preenchimento" id="barra-cand3" style="background-color: #f1c40f;"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- A Mágica Matemática: JavaScript -->
+    <script>
+        // Variáveis para armazenar as frequências absolutas
+        let votos = {
+            1: 0,
+            2: 0,
+            3: 0
+        };
+        let totalDeVotos = 0;
+
+        function votar(candidatoId) {
+            // Incrementa o voto do candidato e o total geral
+            votos[candidatoId]++;
+            totalDeVotos++;
+            atualizarDashboard();
+        }
+
+        function atualizarDashboard() {
+            // Atualiza o texto do total geral
+            document.getElementById('texto-total').innerText = "Total de Votos: " + totalDeVotos;
+
+            // Laço de repetição para atualizar cada uma das 3 barras
+            for (let i = 1; i <= 3; i++) {
+                let votosCandidato = votos[i];
+                
+                // Evita erro matemático de divisão por zero antes do primeiro voto
+                let frequenciaRelativa = 0;
+                if (totalDeVotos > 0) {
+                    // Cálculo da porcentagem (frequência relativa): (parte / todo) * 100
+                    frequenciaRelativa = (votosCandidato / totalDeVotos) * 100;
+                }
+
+                // Atualiza o texto com a Frequência Absoluta e a Relativa formatada
+                document.getElementById('texto-cand' + i).innerText = 
+                    votosCandidato + " votos (" + frequenciaRelativa.toFixed(1) + "%)";
+
+                // Atualiza a largura visual da barra no CSS
+                document.getElementById('barra-cand' + i).style.width = frequenciaRelativa + "%";
+            }
+        }
+
+        function zerarUrna() {
+            if(confirm("Tem certeza que deseja zerar todos os votos?")) {
+                votos = { 1: 0, 2: 0, 3: 0 };
+                totalDeVotos = 0;
+                atualizarDashboard();
+            }
+        }
+    </script>
 </body>
 </html>
-
