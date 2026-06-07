@@ -2,27 +2,56 @@
 <html lang="pt-BR">
   <head>
     <meta charset="utf-8">
-    <title>Projeto Realidade Mista - Sólidos Geométricos</title>
+    <title>Passthrough VR no Celular</title>
     <script src="https://aframe.io/releases/1.4.2/aframe.min.js"></script>
+    
+    <script>
+      // Criando o componente que força a câmera do celular a aparecer no fundo do modo VR
+      AFRAME.registerComponent('passthrough-celular', {
+        init: function () {
+          var cena = this.el;
+          
+          // Cria o elemento de vídeo escondido no HTML
+          var video = document.createElement('video');
+          video.setAttribute('autoplay', '');
+          video.setAttribute('muted', '');
+          video.setAttribute('playsinline', ''); // Obrigatório para rodar no Chrome do celular
+          video.id = 'webcam-feed';
+          video.style.display = 'none';
+          document.body.appendChild(video);
+
+          // Solicita acesso especificamente à câmera traseira ('environment')
+          navigator.mediaDevices.getUserMedia({ 
+            video: { facingMode: 'environment' } 
+          })
+          .then(function (stream) {
+            video.srcObject = stream;
+            
+            // Cria uma esfera gigante que servirá de "céu", mas usando o vídeo da câmera como textura
+            var fundoVideo = document.createElement('a-videosphere');
+            fundoVideo.setAttribute('src', '#webcam-feed');
+            fundoVideo.setAttribute('rotation', '0 -90 0'); // Alinha o centro da câmera com a visão inicial
+            cena.appendChild(fundoVideo);
+          })
+          .catch(function (erro) {
+            console.error('Erro ao acessar a câmera do celular:', erro);
+            alert('Para ver o ambiente real, você precisa permitir o acesso à câmera.');
+          });
+        }
+      });
+    </script>
   </head>
   <body>
-    <a-scene webxr="optionalFeatures: hit-test;">
+    
+    <a-scene passthrough-celular>
       
-      <a-entity hide-on-enter-ar>
-        <a-sky color="#2C3E50"></a-sky>
-        <a-grid position="0 0 0"></a-grid>
-      </a-entity>
+      <a-box position="0 1.5 -3" rotation="0 45 0" color="#4CC3D9"
+             animation="property: rotation; to: 0 405 0; loop: true; dur: 5000">
+      </a-box>
 
-      <a-dodecahedron position="0 1.5 -2.5" radius="0.5" color="#E74C3C" wireframe="false"
-                      animation="property: rotation; to: 360 360 0; loop: true; dur: 6000">
-      </a-dodecahedron>
+      <a-text value="Modo Passthrough Celular" position="0 2.3 -3" align="center" color="#FFFFFF" width="5"></a-text>
 
-      <a-text value="Sólido no Mundo Real" position="0 2.3 -2.5" align="center" color="#F1C40F" width="4"
-              animation="property: position; dir: alternate; to: 0 2.4 -2.5; loop: true; dur: 2000">
-      </a-text>
-
-      <a-light type="ambient" color="#ffffff" intensity="0.8"></a-light>
-      <a-light type="directional" position="1 2 1" intensity="0.5"></a-light>
+      <a-light type="ambient" color="#FFF"></a-light>
 
       <a-entity camera position="0 1.6 0" look-controls></a-entity>
       
