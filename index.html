@@ -2,40 +2,53 @@
 <html lang="pt-BR">
   <head>
     <meta charset="utf-8">
-    <title>Passthrough VR no Celular</title>
+    <title>Passthrough VR com Interação</title>
     <script src="https://aframe.io/releases/1.4.2/aframe.min.js"></script>
     
     <script>
-      // Criando o componente que força a câmera do celular a aparecer no fundo do modo VR
+      // 1. Componente da Câmera no Fundo (Passthrough)
       AFRAME.registerComponent('passthrough-celular', {
         init: function () {
           var cena = this.el;
-          
-          // Cria o elemento de vídeo escondido no HTML
           var video = document.createElement('video');
           video.setAttribute('autoplay', '');
           video.setAttribute('muted', '');
-          video.setAttribute('playsinline', ''); // Obrigatório para rodar no Chrome do celular
+          video.setAttribute('playsinline', '');
           video.id = 'webcam-feed';
           video.style.display = 'none';
           document.body.appendChild(video);
 
-          // Solicita acesso especificamente à câmera traseira ('environment')
-          navigator.mediaDevices.getUserMedia({ 
-            video: { facingMode: 'environment' } 
-          })
+          navigator.mediaDevices.getUserMedia({ video: { facingMode: 'environment' } })
           .then(function (stream) {
             video.srcObject = stream;
-            
-            // Cria uma esfera gigante que servirá de "céu", mas usando o vídeo da câmera como textura
             var fundoVideo = document.createElement('a-videosphere');
             fundoVideo.setAttribute('src', '#webcam-feed');
-            fundoVideo.setAttribute('rotation', '0 -90 0'); // Alinha o centro da câmera com a visão inicial
+            fundoVideo.setAttribute('rotation', '0 -90 0');
             cena.appendChild(fundoVideo);
           })
           .catch(function (erro) {
-            console.error('Erro ao acessar a câmera do celular:', erro);
-            alert('Para ver o ambiente real, você precisa permitir o acesso à câmera.');
+            console.error('Erro na câmera:', erro);
+          });
+        }
+      });
+
+      // 2. Componente de Interação (O que acontece quando o aluno olha pro objeto)
+      AFRAME.registerComponent('interativo', {
+        init: function () {
+          var elemento = this.el;
+          var cores = ['#FF5733', '#33FF57', '#3357FF', '#F1C40F', '#9B59B6'];
+
+          // Quando o cursor terminar de carregar (clique pelo olhar)
+          elemento.addEventListener('click', function () {
+            // Escolhe uma cor aleatória da lista acima
+            var corAleatoria = cores[Math.floor(Math.random() * cores.length)];
+            elemento.setAttribute('color', corAleatoria);
+            
+            // Pequeno pulo (animação) para mostrar que interagiu
+            elemento.setAttribute('scale', '1.2 1.2 1.2');
+            setTimeout(function() {
+              elemento.setAttribute('scale', '1 1 1');
+            }, 300);
           });
         }
       });
@@ -45,15 +58,25 @@
     
     <a-scene passthrough-celular>
       
-      <a-box position="0 1.5 -3" rotation="0 45 0" color="#4CC3D9"
-             animation="property: rotation; to: 0 405 0; loop: true; dur: 5000">
-      </a-box>
+      <a-box position="0 1.5 -3" rotation="0 45 0" color="#4CC3D9" interativo
+             animation="property: rotation; to: 0 405 0; loop: true; dur: 5000"
+             class="clicavel"> </a-box>
 
-      <a-text value="Modo Passthrough Celular" position="0 2.3 -3" align="center" color="#FFFFFF" width="5"></a-text>
+      <a-text value="Olhe para o cubo para interagir" position="0 2.3 -3" align="center" color="#FFFFFF" width="5"></a-text>
 
       <a-light type="ambient" color="#FFF"></a-light>
 
-      <a-entity camera position="0 1.6 0" look-controls></a-entity>
+      <a-entity camera position="0 1.6 0" look-controls>
+        
+        <a-cursor fuse="true" fuse-timeout="1500" 
+                  color="white" 
+                  raycaster="objects: .clicavel"
+                  animation__fusing="property: scale; startEvents: fusing; easing: easeInCubic; dur: 1500; from: 1 1 1; to: 0.1 0.1 0.1"
+                  animation__click="property: scale; startEvents: click; easing: easeInCubic; dur: 150; from: 0.1 0.1 0.1; to: 1 1 1"
+                  animation__mouseleave="property: scale; startEvents: mouseleave; easing: easeInCubic; dur: 500; to: 1 1 1">
+        </a-cursor>
+
+      </a-entity>
       
     </a-scene>
   </body>
