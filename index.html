@@ -51,8 +51,7 @@
                 <div class="overflow-x-auto">
                     <table class="w-full min-w-[600px] border-collapse border border-gray-700 text-xs text-center">
                         <thead>
-                            <tr id="header-turno-1" class="bg-gray-700 text-gray-200 uppercase text-[10px] tracking-wider">
-                                </tr>
+                            <tr id="header-turno-1" class="bg-gray-700 text-gray-200 uppercase text-[10px] tracking-wider"></tr>
                         </thead>
                         <tbody id="grid-body-turno-1"></tbody>
                     </table>
@@ -64,8 +63,7 @@
                 <div class="overflow-x-auto">
                     <table class="w-full min-w-[600px] border-collapse border border-gray-700 text-xs text-center">
                         <thead>
-                            <tr id="header-turno-2" class="bg-gray-700 text-gray-200 uppercase text-[10px] tracking-wider">
-                                </tr>
+                            <tr id="header-turno-2" class="bg-gray-700 text-gray-200 uppercase text-[10px] tracking-wider"></tr>
                         </thead>
                         <tbody id="grid-body-turno-2"></tbody>
                     </table>
@@ -92,7 +90,7 @@
                 <div id="lista-turmas" class="space-y-1 text-sm"></div>
             </div>
             <div class="p-3 border-t border-gray-700 bg-gray-850 text-right rounded-b-xl">
-                <button onclick="fecharModalTurmas()" class="bg-gray-600 hover:bg-gray-500 px-4 py-2 rounded text-xs">Fechar</button>
+                <button onclick="fecharModalTurmas()" class="bg-gray-600 hover:bg-gray-500 text-white px-4 py-2 rounded text-xs">Concluir</button>
             </div>
         </div>
     </div>
@@ -100,7 +98,7 @@
     <div id="modal-bd" class="fixed inset-0 bg-black/80 z-50 hidden flex-col items-center justify-center p-4">
         <div class="bg-gray-800 border border-gray-600 rounded-xl w-full max-w-3xl max-h-[95vh] flex flex-col shadow-2xl">
             <div class="p-4 border-b border-gray-700 flex justify-between items-center bg-gray-850 rounded-t-xl">
-                <h2 class="text-lg font-bold text-emerald-400">⚙️ Configurar Professores e Restrições Múltiplas</h2>
+                <h2 class="text-lg font-bold text-emerald-400">⚙️ Configurar Professores e Restrições</h2>
                 <button onclick="fecharModalBD()" class="text-gray-400 hover:text-white text-xl">&times;</button>
             </div>
 
@@ -108,7 +106,7 @@
                 <div class="bg-gray-750 p-4 rounded-lg border border-gray-650 space-y-4">
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-3 text-sm">
                         <div>
-                            <label class="block text-xs text-gray-400 mb-1">Identificação / Disciplina (Ex: Mat-Michel)</label>
+                            <label class="block text-xs text-gray-400 mb-1">Disciplina (Ex: Mat-Michel)</label>
                             <input type="text" id="input-nome" class="w-full bg-gray-900 border border-gray-600 rounded px-3 py-2 text-white">
                         </div>
                         <div>
@@ -140,11 +138,11 @@
                     <div class="pt-3 border-t border-gray-600 space-y-3">
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                             <div>
-                                <h4 class="text-xs font-semibold text-amber-400 uppercase mb-2">Dias Permitidos (Se nenhum for marcado, vale qualquer dia)</h4>
+                                <h4 class="text-xs font-semibold text-amber-400 uppercase mb-2">Dias Permitidos (Vazio = Todos)</h4>
                                 <div id="checkbox-dias" class="flex flex-wrap gap-2"></div>
                             </div>
                             <div>
-                                <h4 class="text-xs font-semibold text-blue-400 uppercase mb-2">Horários Permitidos (Se nenhum for marcado, vale qualquer horário)</h4>
+                                <h4 class="text-xs font-semibold text-blue-400 uppercase mb-2">Horários Permitidos (Vazio = Todos)</h4>
                                 <div id="checkbox-horarios" class="grid grid-cols-2 gap-1"></div>
                             </div>
                         </div>
@@ -186,6 +184,7 @@
                 { nome: "2B", turno: 2 }, { nome: "2C", turno: 2 }, { nome: "3B", turno: 2 }
             ];
             COMPONENTES = JSON.parse(localStorage.getItem("LiraPro_DB_V3")) || [];
+            
             montarCheckboxesRestricoes();
             atualizarSelectTurmas();
             inicializarEstruturas();
@@ -211,11 +210,20 @@
             });
         }
 
-        function getTurmas(turno) { return TURMAS.filter(t => t.turno === parseInt(turno)).map(t => t.nome); }
+        function getTurmas(turno) { 
+            return TURMAS.filter(t => t.turno === parseInt(turno)).map(t => t.nome); 
+        }
 
-        // MÓDULO TURMAS
-        function abrirModalTurmas() { document.getElementById("modal-turmas").classList.replace("hidden", "flex"); renderizarListaTurmas(); }
-        function fecharModalTurmas() { document.getElementById("modal-turmas").classList.replace("flex", "hidden"); inicializarEstruturas(); renderizarGradesEmTela(); }
+        function abrirModalTurmas() { 
+            document.getElementById("modal-turmas").classList.replace("hidden", "flex"); 
+            renderizarListaTurmas(); 
+        }
+        
+        function fecharModalTurmas() { 
+            document.getElementById("modal-turmas").classList.replace("flex", "hidden"); 
+            inicializarEstruturas(); 
+            renderizarGradesEmTela(); 
+        }
         
         function adicionarTurma() {
             const nome = document.getElementById("input-nova-turma").value.trim().toUpperCase();
@@ -225,12 +233,16 @@
             TURMAS.push({ nome, turno });
             salvarDados();
             document.getElementById("input-nova-turma").value = "";
+            inicializarEstruturas();
+            renderizarGradesEmTela();
         }
 
         function removerTurma(nome) {
             TURMAS = TURMAS.filter(t => t.nome !== nome);
             COMPONENTES = COMPONENTES.filter(c => c.turma !== nome);
             salvarDados();
+            inicializarEstruturas();
+            renderizarGradesEmTela();
         }
 
         function renderizarListaTurmas() {
@@ -245,23 +257,30 @@
         }
 
         function atualizarSelectTurmas() {
-            const select = document.getElementById("input-turma-alvo"); select.innerHTML = "";
+            const select = document.getElementById("input-turma-alvo"); 
+            if(!select) return;
+            select.innerHTML = "";
             TURMAS.forEach(t => select.innerHTML += `<option value="${t.nome}">${t.nome}</option>`);
         }
 
-        // MÓDULO RESTRIÇÕES MÚLTIPLAS HTML
         function montarCheckboxesRestricoes() {
             const divDias = document.getElementById("checkbox-dias"); divDias.innerHTML = "";
             DIAS.forEach(d => divDias.innerHTML += `<label class="inline-flex items-center bg-gray-900 px-2 py-1 rounded text-xs cursor-pointer"><input type="checkbox" name="rest-dia" value="${d}" class="mr-1"> ${d.substring(0,3)}</label>`);
 
             const divHrs = document.getElementById("checkbox-horarios"); divHrs.innerHTML = "";
             const labels = ["1º Hor.", "2º Hor.", "3º Hor.", "4º Hor.", "5º Hor.", "6º Hor.", "7º Hor."];
-            const indices = [0, 1, 3, 4, 5, 7, 8]; // Pulando índices dos intervalos
+            const indices = [0, 1, 3, 4, 5, 7, 8];
             indices.forEach((val, i) => divHrs.innerHTML += `<label class="inline-flex items-center text-xs"><input type="checkbox" name="rest-hr" value="${val}" class="mr-1"> ${labels[i]}</label>`);
         }
 
-        function abrirModalBD() { document.getElementById("modal-bd").classList.replace("hidden", "flex"); renderizarListaBD(); }
-        function fecharModalBD() { document.getElementById("modal-bd").classList.replace("flex", "hidden"); }
+        function abrirModalBD() { 
+            document.getElementById("modal-bd").classList.replace("hidden", "flex"); 
+            atualizarSelectTurmas();
+            renderizarListaBD(); 
+        }
+        function fecharModalBD() { 
+            document.getElementById("modal-bd").classList.replace("flex", "hidden"); 
+        }
 
         function adicionarComponente() {
             const nome = document.getElementById("input-nome").value.trim();
@@ -279,7 +298,10 @@
             COMPONENTES.push({ nome, prof, area, turma, ch, maxAulas, diasPermitidos: diasMarcados, hrsPermitidas: hrsMarcadas });
             salvarDados();
 
-            document.getElementById("input-nome").value = ""; document.getElementById("input-prof").value = "";
+            document.getElementById("input-nome").value = ""; 
+            document.getElementById("input-prof").value = "";
+            document.querySelectorAll('input[name="rest-dia"]:checked').forEach(el => el.checked = false);
+            document.querySelectorAll('input[name="rest-hr"]:checked').forEach(el => el.checked = false);
         }
 
         function removerComponente(idx) { COMPONENTES.splice(idx, 1); salvarDados(); }
@@ -299,11 +321,9 @@
             });
         }
 
-        // NOVO MOTOR REFORMULADO DE DISTRIBUIÇÃO SEM CONFLITOS
         function validarConflito(dia, indexHorario, turma, componente, turnoAlvo) {
             const prof = componente.prof;
 
-            // 1. Reunião de Área (Turno 1, frames 7 e 8)
             if (turnoAlvo === 1 && (indexHorario === 7 || indexHorario === 8)) {
                 if (dia === "SEGUNDA" && componente.area === "Natureza") return false;
                 if (dia === "TERÇA" && componente.area === "Humanas") return false;
@@ -311,19 +331,19 @@
                 if (dia === "QUINTA" && componente.area === "Matemática") return false;
             }
 
-            // 2. Professor Ocupado em qualquer outra turma do mesmo turno
             const gradeDoTurno = turnoAlvo === 1 ? gradeTurno1[dia][indexHorario] : gradeTurno2[dia][indexHorario];
             for (let t in gradeDoTurno) {
                 if (gradeDoTurno[t] && gradeDoTurno[t].prof === prof) return false;
             }
 
-            // 3. Validação das Múltiplas caixas de seleção
             if (componente.diasPermitidos.length > 0 && !componente.diasPermitidos.includes(dia)) return false;
             if (componente.hrsPermitidas.length > 0 && !componente.hrsPermitidas.includes(indexHorario.toString())) return false;
 
-            // 4. Limite de aulas no mesmo dia para a turma
             let contagemHoje = 0;
-            gradeDoTurno.forEach(h => { if(h && h[turma] && h[turma].nome === componente.nome) contagemHoje++; });
+            const listaHorariosDia = turnoAlvo === 1 ? gradeTurno1[dia] : gradeTurno2[dia];
+            listaHorariosDia.forEach(h => { 
+                if(h && h[turma] && h[turma].nome === componente.nome) contagemHoje++; 
+            });
             if (contagemHoje >= componente.maxAulas) return false;
 
             return true;
@@ -332,11 +352,10 @@
         function gerarGradeCompleta() {
             inicializarEstruturas();
             
-            // Cria cópia de trabalho da Carga Horária de cada disciplina cadastrada
             let chRestante = COMPONENTES.map(c => ({ ...c, aulasAlocadas: 0 }));
 
-            // Loop de tentativas sobre os dias e horários para escoar toda a carga horária
-            for (let tentativa = 0; tentativa < 5; tentativa++) { // 5 passadas aleatórias ajudam a fechar a grade sem travar
+            // 15 Passadas rápidas de busca estocástica para evitar loops de colisão de restrições
+            for (let passada = 0; passada < 15; passada++) {
                 DIAS.forEach(dia => {
                     [1, 2].forEach(turno => {
                         const horarios = turno === 1 ? HORARIOS_TURNO_1 : HORARIOS_TURNO_2;
@@ -346,19 +365,16 @@
                         horarios.forEach((horario, idx) => {
                             if (horario === "LANCHE" || horario === "ALMOÇO" || horario === "JANTAR") return;
 
-                            // Quarta-feira: Reserva de Eletivas Fixas
                             if (dia === "QUARTA" && (idx === 0 || idx === 1)) {
                                 turmasDoTurno.forEach(t => gradeAlvo[dia][idx][t] = { nome: "ELETIVA", prof: "Todos" });
                                 return;
                             }
 
                             turmasDoTurno.forEach(turma => {
-                                // Se a célula já estiver ocupada, passa direto
                                 if (gradeAlvo[dia][idx][turma] !== null) return;
 
-                                // Filtra disciplinas da turma que ainda precisam de aulas cumpridas
                                 let pendentes = chRestante.filter(c => c.turma === turma && c.aulasAlocadas < c.ch);
-                                pendentes.sort(() => Math.random() - 0.5); // Embaralha para pulverizar
+                                pendentes.sort(() => Math.random() - 0.5);
 
                                 for (let comp of pendentes) {
                                     if (validarConflito(dia, idx, turma, comp, turno)) {
@@ -376,56 +392,67 @@
         }
 
         function renderizarGradesEmTela() {
+            // Turno 1
             const t1Turmas = getTurmas(1);
             const h1 = document.getElementById("header-turno-1");
-            h1.innerHTML = `<th class="p-2 border border-gray-600 w-16">Dia</th><th class="p-2 border border-gray-600 w-24">Horário</th>`;
-            t1Turmas.forEach(t => h1.innerHTML += `<th class="p-2 border border-gray-600 bg-gray-900">${t}</th>`);
+            if (h1) {
+                h1.innerHTML = `<th class="p-2 border border-gray-600 w-16">Dia</th><th class="p-2 border border-gray-600 w-24">Horário</th>`;
+                t1Turmas.forEach(t => h1.innerHTML += `<th class="p-2 border border-gray-600 bg-gray-900">${t}</th>`);
+            }
 
-            const tbody1 = document.getElementById("grid-body-turno-1"); tbody1.innerHTML = "";
-            DIAS.forEach(dia => {
-                HORARIOS_TURNO_1.forEach((horario, idx) => {
-                    let tr = document.createElement("tr"); tr.className = "hover:bg-gray-750 border-b border-gray-700/50";
-                    if (idx === 0) tr.innerHTML = `<td class="p-2 font-bold bg-gray-850 border-r border-gray-700" rowspan="${HORARIOS_TURNO_1.length}">${dia.substring(0,3)}</td>`;
-                    tr.innerHTML += `<td class="p-1 text-gray-400 bg-gray-900/30 text-[10px] md:text-xs">${horario}</td>`;
+            const tbody1 = document.getElementById("grid-body-turno-1"); 
+            if (tbody1) {
+                tbody1.innerHTML = "";
+                DIAS.forEach(dia => {
+                    HORARIOS_TURNO_1.forEach((horario, idx) => {
+                        let tr = document.createElement("tr"); tr.className = "hover:bg-gray-750 border-b border-gray-700/50";
+                        if (idx === 0) tr.innerHTML = `<td class="p-2 font-bold bg-gray-850 border-r border-gray-700" rowspan="${HORARIOS_TURNO_1.length}">${dia.substring(0,3)}</td>`;
+                        tr.innerHTML += `<td class="p-1 text-gray-400 bg-gray-900/30 text-[10px] md:text-xs">${horario}</td>`;
 
-                    if (horario === "LANCHE" || horario === "ALMOÇO") {
-                        tr.innerHTML += `<td colspan="${t1Turmas.length}" class="bg-amber-950/40 text-amber-500 py-1 text-[10px] font-bold tracking-widest">${horario}</td>`;
-                    } else {
-                        t1Turmas.forEach(t => {
-                            const aula = gradeTurno1[dia][idx][t];
-                            let estilo = aula ? (aula.nome === "ELETIVA" ? "bg-amber-800/80 text-amber-100" : "bg-indigo-950/60 text-indigo-200") : "text-gray-600";
-                            tr.innerHTML += `<td class="p-1 border-l border-gray-700/60 ${estilo}">${aula ? aula.nome : "-"}</td>`;
-                        });
-                    }
-                    tbody1.appendChild(tr);
+                        if (horario === "LANCHE" || horario === "ALMOÇO") {
+                            tr.innerHTML += `<td colspan="${t1Turmas.length || 1}" class="bg-amber-950/40 text-amber-500 py-1 text-[10px] font-bold tracking-widest">${horario}</td>`;
+                        } else {
+                            t1Turmas.forEach(t => {
+                                const aula = gradeTurno1[dia] && gradeTurno1[dia][idx] ? gradeTurno1[dia][idx][t] : null;
+                                let estilo = aula ? (aula.nome === "ELETIVA" ? "bg-amber-800/80 text-amber-100" : "bg-indigo-950/60 text-indigo-200") : "text-gray-600";
+                                tr.innerHTML += `<td class="p-1 border-l border-gray-700/60 ${estilo}">${aula ? aula.nome : "-"}</td>`;
+                            });
+                        }
+                        tbody1.appendChild(tr);
+                    });
                 });
-            });
+            }
 
             // Turno 2
             const t2Turmas = getTurmas(2);
             const h2 = document.getElementById("header-turno-2");
-            h2.innerHTML = `<th class="p-2 border border-gray-600 w-16">Dia</th><th class="p-2 border border-gray-600 w-24">Horário</th>`;
-            t2Turmas.forEach(t => h2.innerHTML += `<th class="p-2 border border-gray-600 bg-gray-900">${t}</th>`);
+            if (h2) {
+                h2.innerHTML = `<th class="p-2 border border-gray-600 w-16">Dia</th><th class="p-2 border border-gray-600 w-24">Horário</th>`;
+                t2Turmas.forEach(t => h2.innerHTML += `<th class="p-2 border border-gray-600 bg-gray-900">${t}</th>`);
+            }
 
-            const tbody2 = document.getElementById("grid-body-turno-2"); tbody2.innerHTML = "";
-            DIAS.forEach(dia => {
-                HORARIOS_TURNO_2.forEach((horario, idx) => {
-                    let tr = document.createElement("tr"); tr.className = "hover:bg-gray-750 border-b border-gray-700/50";
-                    if (idx === 0) tr.innerHTML = `<td class="p-2 font-bold bg-gray-850 border-r border-gray-700" rowspan="${HORARIOS_TURNO_2.length}">${dia.substring(0,3)}</td>`;
-                    tr.innerHTML += `<td class="p-1 text-gray-400 bg-gray-900/30 text-[10px] md:text-xs">${horario}</td>`;
+            const tbody2 = document.getElementById("grid-body-turno-2"); 
+            if (tbody2) {
+                tbody2.innerHTML = "";
+                DIAS.forEach(dia => {
+                    HORARIOS_TURNO_2.forEach((horario, idx) => {
+                        let tr = document.createElement("tr"); tr.className = "hover:bg-gray-750 border-b border-gray-700/50";
+                        if (idx === 0) tr.innerHTML = `<td class="p-2 font-bold bg-gray-850 border-r border-gray-700" rowspan="${HORARIOS_TURNO_2.length}">${dia.substring(0,3)}</td>`;
+                        tr.innerHTML += `<td class="p-1 text-gray-400 bg-gray-900/30 text-[10px] md:text-xs">${horario}</td>`;
 
-                    if (horario === "LANCHE" || horario === "JANTAR") {
-                        tr.innerHTML += `<td colspan="${t2Turmas.length}" class="bg-teal-950/40 text-teal-400 py-1 text-[10px] font-bold tracking-widest">${horario}</td>`;
-                    } else {
-                        t2Turmas.forEach(t => {
-                            const aula = gradeTurno2[dia][idx][t];
-                            let estilo = aula ? (aula.nome === "ELETIVA" ? "bg-amber-800/80 text-amber-100" : "bg-teal-950/40 text-teal-200") : "text-gray-600";
-                            tr.innerHTML += `<td class="p-1 border-l border-gray-700/60 ${estilo}">${aula ? aula.nome : "-"}</td>`;
-                        });
-                    }
-                    tbody2.appendChild(tr);
+                        if (horario === "LANCHE" || horario === "JANTAR") {
+                            tr.innerHTML += `<td colspan="${t2Turmas.length || 1}" class="bg-teal-950/40 text-teal-400 py-1 text-[10px] font-bold tracking-widest">${horario}</td>`;
+                        } else {
+                            t2Turmas.forEach(t => {
+                                const aula = gradeTurno2[dia] && gradeTurno2[dia][idx] ? gradeTurno2[dia][idx][t] : null;
+                                let estilo = aula ? (aula.nome === "ELETIVA" ? "bg-amber-800/80 text-amber-100" : "bg-teal-950/40 text-teal-200") : "text-gray-600";
+                                tr.innerHTML += `<td class="p-1 border-l border-gray-700/60 ${estilo}">${aula ? aula.nome : "-"}</td>`;
+                            });
+                        }
+                        tbody2.appendChild(tr);
+                    });
                 });
-            });
+            }
         }
 
         function alternarVisualizacaoTurno() {
@@ -434,9 +461,13 @@
             document.getElementById("painel-turno-2").classList.toggle("hidden", v !== "2");
         }
 
-        function limparGrade() { inicializarEstruturas(); renderizarGradesEmTela(); }
+        function limparGrade() { 
+            inicializarEstruturas(); 
+            renderizarGradesEmTela(); 
+        }
 
-        window.onload = carregarDados;
+        // Garante a execução na ordem correta
+        window.addEventListener("DOMContentLoaded", carregarDados);
     </script>
 </body>
 </html>
