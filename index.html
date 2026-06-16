@@ -98,12 +98,14 @@
     <div id="modal-bd" class="fixed inset-0 bg-black/80 z-50 hidden flex-col items-center justify-center p-4">
         <div class="bg-gray-800 border border-gray-600 rounded-xl w-full max-w-3xl max-h-[95vh] flex flex-col shadow-2xl">
             <div class="p-4 border-b border-gray-700 flex justify-between items-center bg-gray-850 rounded-t-xl">
-                <h2 class="text-lg font-bold text-emerald-400">⚙️ Configurar Professores e Restrições</h2>
+                <h2 class="text-lg font-bold text-emerald-400" id="titulo-modal-prof">⚙️ Configurar Professores e Restrições</h2>
                 <button onclick="fecharModalBD()" class="text-gray-400 hover:text-white text-xl">&times;</button>
             </div>
 
-            <div class="p-4 overflow-y-auto flex-1 space-y-6">
+            <div class="p-4 overflow-y-auto flex-1 space-y-6" id="container-scroll-modal">
                 <div class="bg-gray-750 p-4 rounded-lg border border-gray-650 space-y-4">
+                    <h3 class="text-sm font-semibold text-gray-300 uppercase tracking-wider" id="formulario-acao-texto">Nova Disciplina/Professor</h3>
+                    
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-3 text-sm">
                         <div>
                             <label class="block text-xs text-gray-400 mb-1">Disciplina (Ex: Mat-Michel)</label>
@@ -152,7 +154,7 @@
                         </div>
                     </div>
                     
-                    <button onclick="adicionarComponente()" class="w-full bg-emerald-600 hover:bg-emerald-500 text-white font-bold py-2 rounded transition shadow">
+                    <button onclick="adicionarComponente()" id="btn-salvar-prof" class="w-full bg-emerald-600 hover:bg-emerald-500 text-white font-bold py-2 rounded transition shadow">
                         + Salvar Configuração de Disciplina
                     </button>
                 </div>
@@ -175,6 +177,7 @@
 
         let TURMAS = [];
         let COMPONENTES = [];
+        let editandoIndex = -1; // Variável de controle para saber se estamos editando (-1 significa que não)
         let gradeTurno1 = {};
         let gradeTurno2 = {};
 
@@ -276,6 +279,7 @@
         function abrirModalBD() { 
             document.getElementById("modal-bd").classList.replace("hidden", "flex"); 
             atualizarSelectTurmas();
+            cancelarEdicao(); // Garante que o formulário comece limpo
             renderizarListaBD(); 
         }
         function fecharModalBD() { 
@@ -295,28 +299,103 @@
 
             if(!nome || !prof) return alert("Preencha Código e Professor!");
 
-            COMPONENTES.push({ nome, prof, area, turma, ch, maxAulas, diasPermitidos: diasMarcados, hrsPermitidas: hrsMarcadas });
+            const novaDisciplina = { nome, prof, area, turma, ch, maxAulas, diasPermitidos: diasMarcados, hrsPermitidas: hrsMarcadas };
+
+            if(editandoIndex === -1) {
+                // Modo Inserção Normal
+                COMPONENTES.push(novaDisciplina);
+            } else {
+                // Modo Edição de item existente
+                COMPONENTES[editandoIndex] = novaDisciplina;
+                editandoIndex = -1; // Reseta controle
+                
+                // Restaura visual do formulário
+                document.getElementById("btn-salvar-prof").className = "w-full bg-emerald-600 hover:bg-emerald-500 text-white font-bold py-2 rounded transition shadow";
+                document.getElementById("btn-salvar-prof").innerText = "+ Salvar Configuração de Disciplina";
+                document.getElementById("formulario-acao-texto").innerText = "Nova Disciplina/Professor";
+                document.getElementById("formulario-acao-texto").className = "text-sm font-semibold text-gray-300 uppercase tracking-wider";
+            }
+
             salvarDados();
 
+            // Limpa os campos
             document.getElementById("input-nome").value = ""; 
             document.getElementById("input-prof").value = "";
             document.querySelectorAll('input[name="rest-dia"]:checked').forEach(el => el.checked = false);
             document.querySelectorAll('input[name="rest-hr"]:checked').forEach(el => el.checked = false);
         }
 
-        function removerComponente(idx) { COMPONENTES.splice(idx, 1); salvarDados(); }
+        // FUNÇÃO DE EDICAO (NOVA!)
+        function prepararEdicao(idx) {
+            editandoIndex = idx;
+            const c = COMPONENTES[idx];
+
+            // Injeta os valores de volta nos inputs
+            document.getElementById("input-nome").value = c.nome;
+            document.getElementById("input-prof").value = c.prof;
+            document.getElementById("input-area").value = c.area;
+            document.getElementById("input-turma-alvo").value = c.turma;
+            document.getElementById("input-ch").value = c.ch;
+            document.getElementById("input-max-aulas").value = c.maxAulas;
+
+            // Reseta e marca os checkboxes de dias
+            document.querySelectorAll('input[name="rest-dia"]').forEach(el => {
+                el.checked = c.diasPermitidos.includes(el.value);
+            });
+
+            // Reseta e marca os checkboxes de horários
+            document.querySelectorAll('input[name="rest-hr"]').forEach(el => {
+                el.checked = c.hrsPermitidas.includes(el.value);
+            });
+
+            // Altera o visual do formulário para avisar o usuário
+            document.getElementById("btn-salvar-prof").className = "w-full bg-amber-600 hover:bg-amber-500 text-white font-bold py-2 rounded transition shadow";
+            document.getElementById("btn-salvar-prof").innerText = "💾 Atualizar Disciplina";
+            
+            const txtAcao = document.getElementById("formulario-acao-texto");
+            txtAcao.innerText = "✏️ Editando Disciplina Selecionada...";
+            txtAcao.className = "text-sm font-bold text-amber-400 uppercase tracking-wider";
+
+            // Scroll suave para o topo do modal para facilitar edição no celular
+            document.getElementById("container-scroll-modal").scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        function cancelarEdicao() {
+            editandoIndex = -1;
+            document.getElementById("input-nome").value = ""; 
+            document.getElementById("input-prof").value = "";
+            document.querySelectorAll('input[name="rest-dia"]:checked').forEach(el => el.checked = false);
+            document.querySelectorAll('input[name="rest-hr"]:checked').forEach(el => el.checked = false);
+            document.getElementById("btn-salvar-prof").className = "w-full bg-emerald-600 hover:bg-emerald-500 text-white font-bold py-2 rounded transition shadow";
+            document.getElementById("btn-salvar-prof").innerText = "+ Salvar Configuração de Disciplina";
+            document.getElementById("formulario-acao-texto").innerText = "Nova Disciplina/Professor";
+            document.getElementById("formulario-acao-texto").className = "text-sm font-semibold text-gray-300 uppercase tracking-wider";
+        }
+
+        function removerComponente(idx) { 
+            if(confirm("Remover professor da base de dados?")) {
+                if(editandoIndex === idx) cancelarEdicao();
+                COMPONENTES.splice(idx, 1); 
+                salvarDados(); 
+            }
+        }
 
         function renderizarListaBD() {
             const div = document.getElementById("lista-bd"); div.innerHTML = "";
             COMPONENTES.forEach((c, idx) => {
                 let infoDias = c.diasPermitidos.length ? c.diasPermitidos.map(d=>d.substring(0,3)).join("/") : "Qualquer Dia";
                 let infoHrs = c.hrsPermitidas.length ? "Horários Travados" : "Qualquer Horário";
+                
+                // Adicionado Botão de Editar ao lado do de Excluir
                 div.innerHTML += `<div class="bg-gray-700 p-2 text-xs rounded flex justify-between items-center border border-gray-600">
-                    <div>
+                    <div class="flex-1 mr-2">
                         <b class="text-indigo-300 text-sm">${c.nome}</b> -> Turma: <span class="text-emerald-400 font-bold">${c.turma}</span> [C.H: ${c.ch} Aulas]<br>
                         <span class="text-gray-400">Prof: ${c.prof} | Dias: ${infoDias} | Horários: ${infoHrs} | Limite: ${c.maxAulas}/dia</span>
                     </div>
-                    <button onclick="removerComponente(${idx})" class="bg-red-900/80 p-1.5 rounded text-white hover:bg-red-600">Excluir</button>
+                    <div class="flex space-x-1 shrink-0">
+                        <button onclick="prepararEdicao(${idx})" class="bg-amber-700/80 p-1.5 rounded text-white hover:bg-amber-600 text-[11px] transition">Editar</button>
+                        <button onclick="removerComponente(${idx})" class="bg-red-900/80 p-1.5 rounded text-white hover:bg-red-600 text-[11px] transition">Excluir</button>
+                    </div>
                 </div>`;
             });
         }
@@ -354,7 +433,6 @@
             
             let chRestante = COMPONENTES.map(c => ({ ...c, aulasAlocadas: 0 }));
 
-            // 15 Passadas rápidas de busca estocástica para evitar loops de colisão de restrições
             for (let passada = 0; passada < 15; passada++) {
                 DIAS.forEach(dia => {
                     [1, 2].forEach(turno => {
@@ -392,7 +470,6 @@
         }
 
         function renderizarGradesEmTela() {
-            // Turno 1
             const t1Turmas = getTurmas(1);
             const h1 = document.getElementById("header-turno-1");
             if (h1) {
@@ -421,14 +498,6 @@
                         tbody1.appendChild(tr);
                     });
                 });
-            }
-
-            // Turno 2
-            const t2Turmas = getTurmas(2);
-            const h2 = document.getElementById("header-turno-2");
-            if (h2) {
-                h2.innerHTML = `<th class="p-2 border border-gray-600 w-16">Dia</th><th class="p-2 border border-gray-600 w-24">Horário</th>`;
-                t2Turmas.forEach(t => h2.innerHTML += `<th class="p-2 border border-gray-600 bg-gray-900">${t}</th>`);
             }
 
             const tbody2 = document.getElementById("grid-body-turno-2"); 
@@ -466,7 +535,6 @@
             renderizarGradesEmTela(); 
         }
 
-        // Garante a execução na ordem correta
         window.addEventListener("DOMContentLoaded", carregarDados);
     </script>
 </body>
