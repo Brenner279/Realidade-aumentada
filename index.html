@@ -177,15 +177,23 @@
 
         let TURMAS = [];
         let COMPONENTES = [];
-        let editandoIndex = -1; // Variável de controle para saber se estamos editando (-1 significa que não)
+        let editandoIndex = -1;
         let gradeTurno1 = {};
         let gradeTurno2 = {};
 
         function carregarDados() {
-            TURMAS = JSON.parse(localStorage.getItem("LiraPro_Turmas")) || [
-                { nome: "1A", turno: 1 }, { nome: "2A", turno: 1 }, { nome: "3A", turno: 1 },
-                { nome: "2B", turno: 2 }, { nome: "2C", turno: 2 }, { nome: "3B", turno: 2 }
-            ];
+            // Garante as turmas padrão se o cache estiver corrompido ou vazio
+            const turmasSalvas = localStorage.getItem("LiraPro_Turmas");
+            if (!turmasSalvas || JSON.parse(turmasSalvas).length === 0) {
+                TURMAS = [
+                    { nome: "1A", turno: 1 }, { nome: "2A", turno: 1 }, { nome: "3A", turno: 1 },
+                    { nome: "2B", turno: 2 }, { nome: "2C", turno: 2 }, { nome: "3B", turno: 2 }
+                ];
+                localStorage.setItem("LiraPro_Turmas", JSON.stringify(TURMAS));
+            } else {
+                TURMAS = JSON.parse(turmasSalvas);
+            }
+
             COMPONENTES = JSON.parse(localStorage.getItem("LiraPro_DB_V3")) || [];
             
             montarCheckboxesRestricoes();
@@ -279,7 +287,7 @@
         function abrirModalBD() { 
             document.getElementById("modal-bd").classList.replace("hidden", "flex"); 
             atualizarSelectTurmas();
-            cancelarEdicao(); // Garante que o formulário comece limpo
+            cancelarEdicao();
             renderizarListaBD(); 
         }
         function fecharModalBD() { 
@@ -302,14 +310,10 @@
             const novaDisciplina = { nome, prof, area, turma, ch, maxAulas, diasPermitidos: diasMarcados, hrsPermitidas: hrsMarcadas };
 
             if(editandoIndex === -1) {
-                // Modo Inserção Normal
                 COMPONENTES.push(novaDisciplina);
             } else {
-                // Modo Edição de item existente
                 COMPONENTES[editandoIndex] = novaDisciplina;
-                editandoIndex = -1; // Reseta controle
-                
-                // Restaura visual do formulário
+                editandoIndex = -1;
                 document.getElementById("btn-salvar-prof").className = "w-full bg-emerald-600 hover:bg-emerald-500 text-white font-bold py-2 rounded transition shadow";
                 document.getElementById("btn-salvar-prof").innerText = "+ Salvar Configuração de Disciplina";
                 document.getElementById("formulario-acao-texto").innerText = "Nova Disciplina/Professor";
@@ -318,19 +322,16 @@
 
             salvarDados();
 
-            // Limpa os campos
             document.getElementById("input-nome").value = ""; 
             document.getElementById("input-prof").value = "";
             document.querySelectorAll('input[name="rest-dia"]:checked').forEach(el => el.checked = false);
             document.querySelectorAll('input[name="rest-hr"]:checked').forEach(el => el.checked = false);
         }
 
-        // FUNÇÃO DE EDICAO (NOVA!)
         function prepararEdicao(idx) {
             editandoIndex = idx;
             const c = COMPONENTES[idx];
 
-            // Injeta os valores de volta nos inputs
             document.getElementById("input-nome").value = c.nome;
             document.getElementById("input-prof").value = c.prof;
             document.getElementById("input-area").value = c.area;
@@ -338,17 +339,14 @@
             document.getElementById("input-ch").value = c.ch;
             document.getElementById("input-max-aulas").value = c.maxAulas;
 
-            // Reseta e marca os checkboxes de dias
             document.querySelectorAll('input[name="rest-dia"]').forEach(el => {
                 el.checked = c.diasPermitidos.includes(el.value);
             });
 
-            // Reseta e marca os checkboxes de horários
             document.querySelectorAll('input[name="rest-hr"]').forEach(el => {
                 el.checked = c.hrsPermitidas.includes(el.value);
             });
 
-            // Altera o visual do formulário para avisar o usuário
             document.getElementById("btn-salvar-prof").className = "w-full bg-amber-600 hover:bg-amber-500 text-white font-bold py-2 rounded transition shadow";
             document.getElementById("btn-salvar-prof").innerText = "💾 Atualizar Disciplina";
             
@@ -356,7 +354,6 @@
             txtAcao.innerText = "✏️ Editando Disciplina Selecionada...";
             txtAcao.className = "text-sm font-bold text-amber-400 uppercase tracking-wider";
 
-            // Scroll suave para o topo do modal para facilitar edição no celular
             document.getElementById("container-scroll-modal").scrollTo({ top: 0, behavior: 'smooth' });
         }
 
@@ -386,7 +383,6 @@
                 let infoDias = c.diasPermitidos.length ? c.diasPermitidos.map(d=>d.substring(0,3)).join("/") : "Qualquer Dia";
                 let infoHrs = c.hrsPermitidas.length ? "Horários Travados" : "Qualquer Horário";
                 
-                // Adicionado Botão de Editar ao lado do de Excluir
                 div.innerHTML += `<div class="bg-gray-700 p-2 text-xs rounded flex justify-between items-center border border-gray-600">
                     <div class="flex-1 mr-2">
                         <b class="text-indigo-300 text-sm">${c.nome}</b> -> Turma: <span class="text-emerald-400 font-bold">${c.turma}</span> [C.H: ${c.ch} Aulas]<br>
@@ -470,6 +466,7 @@
         }
 
         function renderizarGradesEmTela() {
+            // Re-renderização Dinâmica do Turno 1
             const t1Turmas = getTurmas(1);
             const h1 = document.getElementById("header-turno-1");
             if (h1) {
@@ -498,6 +495,14 @@
                         tbody1.appendChild(tr);
                     });
                 });
+            }
+
+            // Re-renderização Dinâmica do Turno 2 (Corrigido!)
+            const t2Turmas = getTurmas(2);
+            const h2 = document.getElementById("header-turno-2");
+            if (h2) {
+                h2.innerHTML = `<th class="p-2 border border-gray-600 w-16">Dia</th><th class="p-2 border border-gray-600 w-24">Horário</th>`;
+                t2Turmas.forEach(t => h2.innerHTML += `<th class="p-2 border border-gray-600 bg-gray-900">${t}</th>`);
             }
 
             const tbody2 = document.getElementById("grid-body-turno-2"); 
