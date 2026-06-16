@@ -91,38 +91,74 @@
         <div class="bg-gray-800 border border-gray-600 rounded-xl w-full max-w-2xl max-h-[90vh] flex flex-col shadow-2xl">
             
             <div class="p-4 border-b border-gray-700 flex justify-between items-center bg-gray-850 rounded-t-xl">
-                <h2 class="text-lg font-bold text-emerald-400">⚙️ Gerenciar Professores e Disciplinas</h2>
+                <h2 class="text-lg font-bold text-emerald-400">⚙️ Gerenciar Professores e Restrições</h2>
                 <button onclick="fecharModalBD()" class="text-gray-400 hover:text-white text-xl">&times;</button>
             </div>
 
             <div class="p-4 overflow-y-auto flex-1 space-y-6">
                 <div class="bg-gray-750 p-4 rounded-lg border border-gray-650">
-                    <h3 class="text-sm font-semibold text-gray-300 mb-3 uppercase tracking-wider">Adicionar Nova Disciplina/Professor</h3>
+                    <h3 class="text-sm font-semibold text-gray-300 mb-3 uppercase tracking-wider">Nova Disciplina/Professor</h3>
+                    
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-3 text-sm">
                         <div>
                             <label class="block text-xs text-gray-400 mb-1">Cód. Disciplina (Ex: Mat-Michel)</label>
-                            <input type="text" id="input-nome" class="w-full bg-gray-900 border border-gray-600 rounded px-3 py-2 text-white placeholder-gray-600" placeholder="Hist-Carolina">
+                            <input type="text" id="input-nome" class="w-full bg-gray-900 border border-gray-600 rounded px-3 py-2 text-white">
                         </div>
                         <div>
                             <label class="block text-xs text-gray-400 mb-1">Nome Professor(a)</label>
-                            <input type="text" id="input-prof" class="w-full bg-gray-900 border border-gray-600 rounded px-3 py-2 text-white placeholder-gray-600" placeholder="Carolina">
+                            <input type="text" id="input-prof" class="w-full bg-gray-900 border border-gray-600 rounded px-3 py-2 text-white">
                         </div>
                         <div>
-                            <label class="block text-xs text-gray-400 mb-1">Área de Conhecimento (Para bloqueio)</label>
+                            <label class="block text-xs text-gray-400 mb-1">Área (Para bloqueio)</label>
                             <select id="input-area" class="w-full bg-gray-900 border border-gray-600 rounded px-3 py-2 text-white">
-                                <option value="Matemática">Matemática e Suas Tec.</option>
-                                <option value="Natureza">Ciências da Natureza</option>
-                                <option value="Humanas">Ciências Humanas</option>
+                                <option value="Matemática">Matemática</option>
+                                <option value="Natureza">C. da Natureza</option>
+                                <option value="Humanas">C. Humanas</option>
                                 <option value="Linguagens">Linguagens</option>
-                                <option value="Interdisciplinar">Interdisciplinar (Ex: PV, Eletiva)</option>
+                                <option value="Interdisciplinar">Interdisciplinar</option>
                             </select>
                         </div>
                         <div>
-                            <label class="block text-xs text-gray-400 mb-1">Turmas Atendidas (Separe por vírgula)</label>
-                            <input type="text" id="input-turmas" class="w-full bg-gray-900 border border-gray-600 rounded px-3 py-2 text-white placeholder-gray-600" placeholder="1A, 2B, 3A">
+                            <label class="block text-xs text-gray-400 mb-1">Turmas (Separe por vírgula)</label>
+                            <input type="text" id="input-turmas" class="w-full bg-gray-900 border border-gray-600 rounded px-3 py-2 text-white placeholder-gray-600" placeholder="1A, 2B">
+                        </div>
+
+                        <div class="col-span-1 md:col-span-2 mt-2 pt-3 border-t border-gray-600">
+                            <h4 class="text-xs font-semibold text-emerald-400 uppercase tracking-wider mb-2">Restrições Específicas</h4>
+                            <div class="grid grid-cols-1 md:grid-cols-3 gap-3">
+                                <div>
+                                    <label class="block text-[10px] text-gray-400 mb-1">Dia Fixo</label>
+                                    <select id="input-dia-fixo" class="w-full bg-gray-900 border border-gray-600 rounded px-2 py-1.5 text-white text-xs">
+                                        <option value="Qualquer">Qualquer Dia</option>
+                                        <option value="SEGUNDA">Segunda-feira</option>
+                                        <option value="TERÇA">Terça-feira</option>
+                                        <option value="QUARTA">Quarta-feira</option>
+                                        <option value="QUINTA">Quinta-feira</option>
+                                        <option value="SEXTA">Sexta-feira</option>
+                                    </select>
+                                </div>
+                                <div>
+                                    <label class="block text-[10px] text-gray-400 mb-1">Horário Fixo</label>
+                                    <select id="input-horario-fixo" class="w-full bg-gray-900 border border-gray-600 rounded px-2 py-1.5 text-white text-xs">
+                                        <option value="Qualquer">Qualquer Horário</option>
+                                        <option value="0">1º Horário</option>
+                                        <option value="1">2º Horário</option>
+                                        <option value="3">3º Horário</option>
+                                        <option value="4">4º Horário</option>
+                                        <option value="5">5º Horário</option>
+                                        <option value="7">6º Horário</option>
+                                        <option value="8">7º Horário</option>
+                                    </select>
+                                </div>
+                                <div>
+                                    <label class="block text-[10px] text-gray-400 mb-1">Máx. Aulas/Dia (Por Turma)</label>
+                                    <input type="number" id="input-max-aulas" value="2" min="1" max="5" class="w-full bg-gray-900 border border-gray-600 rounded px-2 py-1 text-white text-xs">
+                                </div>
+                            </div>
                         </div>
                     </div>
-                    <button onclick="adicionarComponente()" class="mt-4 w-full bg-emerald-600 hover:bg-emerald-500 text-white font-bold py-2 rounded transition">
+                    
+                    <button onclick="adicionarComponente()" class="mt-4 w-full bg-emerald-600 hover:bg-emerald-500 text-white font-bold py-2 rounded transition shadow">
                         + Cadastrar na Base de Dados
                     </button>
                 </div>
@@ -135,38 +171,32 @@
             </div>
             
             <div class="p-4 border-t border-gray-700 bg-gray-850 rounded-b-xl text-right">
-                <button onclick="fecharModalBD()" class="bg-gray-600 hover:bg-gray-500 text-white px-4 py-2 rounded transition">Concluir</button>
+                <button onclick="fecharModalBD()" class="bg-gray-600 hover:bg-gray-500 text-white px-4 py-2 rounded transition">Concluir Edição</button>
             </div>
         </div>
     </div>
 
     <script>
         const DIAS = ["SEGUNDA", "TERÇA", "QUARTA", "QUINTA", "SEXTA"];
-        
         const HORARIOS_TURNO_1 = ["7h30-8h20", "8h20-9h10", "LANCHE", "9h30-10h20", "10h20-11h10", "11h10-12h", "ALMOÇO", "12h50-13h40", "13h40-14h30"];
         const HORARIOS_TURNO_2 = ["15h30-16h20", "16h20-17h10", "LANCHE", "17h30-18h20", "18h20-19h10", "19h10-20h", "JANTAR", "20h20-21h20", "21h10-22h"];
 
-        // BASE DE DADOS EDITÁVEL (Salva no navegador)
         let COMPONENTES = [];
 
-        // Inicialização: Tenta carregar do celular do usuário. Se não existir, carrega os padrões.
         function carregarBancoDeDados() {
-            const dadosSalvos = localStorage.getItem("LiraPro_DB");
+            const dadosSalvos = localStorage.getItem("LiraPro_DB_V2");
             if (dadosSalvos) {
                 COMPONENTES = JSON.parse(dadosSalvos);
             } else {
-                // Dados padrão de demonstração para a primeira vez que abrir
                 COMPONENTES = [
-                    { nome: "Mat-Michel", prof: "Michel", area: "Matemática", turmas: ["3A", "2B", "2C"] },
-                    { nome: "Pi2Mat-Michel", prof: "Michel", area: "Matemática", turmas: ["2A"] },
-                    { nome: "L.Port-Milene", prof: "Milene", area: "Linguagens", turmas: ["1A", "2C"] }
+                    { nome: "Mat-Michel", prof: "Michel", area: "Matemática", turmas: ["3A", "2B", "2C"], diaFixo: "Qualquer", horarioFixo: "Qualquer", maxAulas: 2 }
                 ];
                 salvarBancoDeDados();
             }
         }
 
         function salvarBancoDeDados() {
-            localStorage.setItem("LiraPro_DB", JSON.stringify(COMPONENTES));
+            localStorage.setItem("LiraPro_DB_V2", JSON.stringify(COMPONENTES));
             renderizarListaBD();
         }
 
@@ -180,7 +210,6 @@
             });
         }
 
-        // FUNÇÕES DO MODAL (Painel Editável)
         function abrirModalBD() {
             document.getElementById("modal-bd").classList.remove("hidden");
             document.getElementById("modal-bd").classList.add("flex");
@@ -197,26 +226,33 @@
             const prof = document.getElementById("input-prof").value.trim();
             const area = document.getElementById("input-area").value;
             const turmasTexto = document.getElementById("input-turmas").value.trim();
+            
+            // Novos Campos
+            const diaFixo = document.getElementById("input-dia-fixo").value;
+            const horarioFixo = document.getElementById("input-horario-fixo").value;
+            const maxAulas = parseInt(document.getElementById("input-max-aulas").value) || 2;
 
             if (!nome || !prof || !turmasTexto) {
-                alert("Preencha todos os campos para cadastrar!");
+                alert("Preencha o Código, Professor e Turmas para cadastrar!");
                 return;
             }
 
-            // Transforma o texto "1A, 2B" em um array limpo ["1A", "2B"]
             const turmasArray = turmasTexto.split(",").map(t => t.trim().toUpperCase());
 
-            COMPONENTES.push({ nome, prof, area, turmas: turmasArray });
+            COMPONENTES.push({ nome, prof, area, turmas: turmasArray, diaFixo, horarioFixo, maxAulas });
             salvarBancoDeDados();
 
-            // Limpa os campos após adicionar
+            // Reseta formulário visual
             document.getElementById("input-nome").value = "";
             document.getElementById("input-prof").value = "";
             document.getElementById("input-turmas").value = "";
+            document.getElementById("input-dia-fixo").value = "Qualquer";
+            document.getElementById("input-horario-fixo").value = "Qualquer";
+            document.getElementById("input-max-aulas").value = "2";
         }
 
         function removerComponente(index) {
-            if (confirm("Tem certeza que deseja remover este professor da base de dados?")) {
+            if (confirm("Remover professor da base de dados?")) {
                 COMPONENTES.splice(index, 1);
                 salvarBancoDeDados();
             }
@@ -232,12 +268,17 @@
             }
 
             COMPONENTES.forEach((comp, index) => {
+                let tagsRestricao = "";
+                if(comp.diaFixo !== "Qualquer") tagsRestricao += `<span class='bg-amber-900/50 text-amber-300 px-1.5 py-0.5 rounded ml-1'>${comp.diaFixo}</span>`;
+                if(comp.horarioFixo !== "Qualquer") tagsRestricao += `<span class='bg-blue-900/50 text-blue-300 px-1.5 py-0.5 rounded ml-1'>Hr. Fixo: ${comp.horarioFixo}</span>`;
+                
                 let div = document.createElement("div");
                 div.className = "flex justify-between items-center bg-gray-700 p-3 rounded border border-gray-600";
                 div.innerHTML = `
                     <div class="text-xs">
                         <strong class="text-indigo-300 text-sm">${comp.nome}</strong> 
-                        <span class="text-gray-400 block mt-1">Prof: ${comp.prof} | Área: <span class="text-gray-200">${comp.area}</span></span>
+                        ${tagsRestricao}
+                        <span class="text-gray-400 block mt-1">Prof: ${comp.prof} | Área: ${comp.area} | Máx Aulas/Dia: ${comp.maxAulas || 2}</span>
                         <span class="text-gray-400 block">Turmas: <span class="font-bold text-gray-100">${comp.turmas.join(", ")}</span></span>
                     </div>
                     <button onclick="removerComponente(${index})" class="bg-red-900/60 hover:bg-red-600 text-red-200 px-3 py-1 rounded text-xs transition">
@@ -248,7 +289,6 @@
             });
         }
 
-        // MOTOR DA GRADE
         function alternarVisualizacaoTurno() {
             const turno = document.getElementById("select-turno").value;
             if (turno === "1") {
@@ -264,6 +304,7 @@
             const prof = componente.prof;
             const area = componente.area;
 
+            // 1. REGRAS DE REUNIÃO DE ÁREA
             if (turnoAlvo === 1 && (indexHorario === 7 || indexHorario === 8)) {
                 if (dia === "SEGUNDA" && area === "Natureza") return false;
                 if (dia === "TERÇA" && area === "Humanas") return false;
@@ -271,16 +312,35 @@
                 if (dia === "QUINTA" && area === "Matemática") return false;
             }
 
+            // 2. CONFLITO DE CHOCAR HORÁRIO DO PROFESSOR
             const gradeDoTurno = turnoAlvo === 1 ? gradeTurno1[dia][indexHorario] : gradeTurno2[dia][indexHorario];
             for (let t in gradeDoTurno) {
                 if (gradeDoTurno[t] && gradeDoTurno[t].prof === prof) return false;
             }
-            return true;
+
+            // 3. REGRAS ESPECÍFICAS DE CADASTRO
+            if (componente.diaFixo && componente.diaFixo !== "Qualquer" && dia !== componente.diaFixo) return false;
+            if (componente.horarioFixo && componente.horarioFixo !== "Qualquer" && indexHorario.toString() !== componente.horarioFixo) return false;
+
+            // 4. LIMITE DE AULAS POR DIA (Evitar 3 aulas seguidas se o limite for 2)
+            let contagemAulasHoje = 0;
+            const gradeCompletaDoDia = turnoAlvo === 1 ? gradeTurno1[dia] : gradeTurno2[dia];
+            
+            gradeCompletaDoDia.forEach(horarios => {
+                if (horarios[turma] && horarios[turma].nome === componente.nome) {
+                    contagemAulasHoje++;
+                }
+            });
+
+            const limiteAulas = componente.maxAulas || 2; // Padrão 2 se não existir
+            if (contagemAulasHoje >= limiteAulas) return false;
+
+            return true; // Se passar por todas as travas, o horário é válido!
         }
 
         function gerarGradeCompleta() {
             if (COMPONENTES.length === 0) {
-                alert("Você precisa cadastrar disciplinas e professores primeiro no botão '⚙️ Professores'!");
+                alert("Cadastre disciplinas e professores primeiro no botão '⚙️ Professores'!");
                 return;
             }
 
@@ -373,7 +433,6 @@
             renderizarGradesEmTela();
         }
 
-        // CARREGA OS DADOS SALVOS ASSIM QUE ABRIR A PÁGINA
         carregarBancoDeDados();
         inicializarEstruturas();
         renderizarGradesEmTela();
