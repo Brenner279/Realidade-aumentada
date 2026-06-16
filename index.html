@@ -14,6 +14,9 @@
             <h1 class="text-lg md:text-xl font-bold tracking-wide text-indigo-400">LiraMunguba Pro</h1>
         </div>
         <div class="flex space-x-2">
+            <button onclick="abrirModalTurmas()" class="bg-blue-700 hover:bg-blue-600 text-white text-xs md:text-sm font-semibold px-3 py-2 rounded transition shadow">
+                🏫 Turmas
+            </button>
             <button onclick="abrirModalBD()" class="bg-emerald-700 hover:bg-emerald-600 text-white text-xs md:text-sm font-semibold px-3 py-2 rounded transition shadow">
                 ⚙️ Professores
             </button>
@@ -27,7 +30,6 @@
     </header>
 
     <main class="flex-1 flex flex-col lg:flex-row overflow-hidden">
-        
         <aside class="w-full lg:w-80 bg-gray-800 border-b lg:border-r border-gray-700 p-4 overflow-y-auto max-h-48 lg:max-h-full space-y-4">
             <div>
                 <h2 class="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-2">Selecione o Turno</h2>
@@ -36,15 +38,10 @@
                     <option value="2">2º Turno (Vespertino/Noturno)</option>
                 </select>
             </div>
-
-            <div class="hidden lg:block">
-                <h2 class="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-2">Reuniões de Área (12h-15h)</h2>
-                <ul class="text-xs space-y-1 text-gray-400">
-                    <li><span class="text-red-400 font-bold">Segunda:</span> Natureza</li>
-                    <li><span class="text-red-400 font-bold">Terça:</span> Humanas</li>
-                    <li><span class="text-red-400 font-bold">Quarta:</span> Linguagens</li>
-                    <li><span class="text-red-400 font-bold">Quinta:</span> Matemática</li>
-                </ul>
+            <div class="hidden lg:block text-xs text-gray-400 space-y-2">
+                <h2 class="font-semibold text-gray-300 uppercase tracking-wider">Regras de Reunião (12h-15h)</h2>
+                <p><span class="text-red-400 font-bold">Seg:</span> Natureza | <span class="text-red-400 font-bold">Ter:</span> Humanas</p>
+                <p><span class="text-red-400 font-bold">Qua:</span> Linguagens | <span class="text-red-400 font-bold">Qui:</span> Matemática</p>
             </div>
         </aside>
 
@@ -54,13 +51,8 @@
                 <div class="overflow-x-auto">
                     <table class="w-full min-w-[600px] border-collapse border border-gray-700 text-xs text-center">
                         <thead>
-                            <tr class="bg-gray-700 text-gray-200 uppercase text-[10px] tracking-wider">
-                                <th class="p-2 border border-gray-600 w-16">Dia</th>
-                                <th class="p-2 border border-gray-600 w-24">Horário</th>
-                                <th class="p-2 border border-gray-600 bg-gray-900">1º A</th>
-                                <th class="p-2 border border-gray-600 bg-gray-900">2º A</th>
-                                <th class="p-2 border border-gray-600 bg-gray-900">3º A</th>
-                            </tr>
+                            <tr id="header-turno-1" class="bg-gray-700 text-gray-200 uppercase text-[10px] tracking-wider">
+                                </tr>
                         </thead>
                         <tbody id="grid-body-turno-1"></tbody>
                     </table>
@@ -72,13 +64,8 @@
                 <div class="overflow-x-auto">
                     <table class="w-full min-w-[600px] border-collapse border border-gray-700 text-xs text-center">
                         <thead>
-                            <tr class="bg-gray-700 text-gray-200 uppercase text-[10px] tracking-wider">
-                                <th class="p-2 border border-gray-600 w-16">Dia</th>
-                                <th class="p-2 border border-gray-600 w-24">Horário</th>
-                                <th class="p-2 border border-gray-600 bg-gray-900">2º B</th>
-                                <th class="p-2 border border-gray-600 bg-gray-900">2º C</th>
-                                <th class="p-2 border border-gray-600 bg-gray-900">3º B</th>
-                            </tr>
+                            <tr id="header-turno-2" class="bg-gray-700 text-gray-200 uppercase text-[10px] tracking-wider">
+                                </tr>
                         </thead>
                         <tbody id="grid-body-turno-2"></tbody>
                     </table>
@@ -87,21 +74,41 @@
         </section>
     </main>
 
-    <div id="modal-bd" class="fixed inset-0 bg-black/80 z-50 hidden flex-col items-center justify-center p-4">
-        <div class="bg-gray-800 border border-gray-600 rounded-xl w-full max-w-2xl max-h-[90vh] flex flex-col shadow-2xl">
-            
+    <div id="modal-turmas" class="fixed inset-0 bg-black/80 z-50 hidden flex-col items-center justify-center p-4">
+        <div class="bg-gray-800 border border-gray-600 rounded-xl w-full max-w-md flex flex-col shadow-2xl">
             <div class="p-4 border-b border-gray-700 flex justify-between items-center bg-gray-850 rounded-t-xl">
-                <h2 class="text-lg font-bold text-emerald-400">⚙️ Gerenciar Professores e Restrições</h2>
+                <h2 class="text-lg font-bold text-blue-400">🏫 Gerenciar Turmas</h2>
+                <button onclick="fecharModalTurmas()" class="text-gray-400 hover:text-white text-xl">&times;</button>
+            </div>
+            <div class="p-4 space-y-4 overflow-y-auto max-h-[60vh]">
+                <div class="flex space-x-2">
+                    <input type="text" id="input-nova-turma" placeholder="Ex: 1A" class="flex-1 bg-gray-900 border border-gray-600 rounded px-3 py-2 text-white uppercase">
+                    <select id="input-turno-turma" class="bg-gray-900 border border-gray-600 rounded px-2 py-2 text-white text-sm">
+                        <option value="1">1º Turno</option>
+                        <option value="2">2º Turno</option>
+                    </select>
+                    <button onclick="adicionarTurma()" class="bg-blue-600 hover:bg-blue-500 text-white px-4 py-2 rounded font-bold">+</button>
+                </div>
+                <div id="lista-turmas" class="space-y-1 text-sm"></div>
+            </div>
+            <div class="p-3 border-t border-gray-700 bg-gray-850 text-right rounded-b-xl">
+                <button onclick="fecharModalTurmas()" class="bg-gray-600 hover:bg-gray-500 px-4 py-2 rounded text-xs">Fechar</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="modal-bd" class="fixed inset-0 bg-black/80 z-50 hidden flex-col items-center justify-center p-4">
+        <div class="bg-gray-800 border border-gray-600 rounded-xl w-full max-w-3xl max-h-[95vh] flex flex-col shadow-2xl">
+            <div class="p-4 border-b border-gray-700 flex justify-between items-center bg-gray-850 rounded-t-xl">
+                <h2 class="text-lg font-bold text-emerald-400">⚙️ Configurar Professores e Restrições Múltiplas</h2>
                 <button onclick="fecharModalBD()" class="text-gray-400 hover:text-white text-xl">&times;</button>
             </div>
 
             <div class="p-4 overflow-y-auto flex-1 space-y-6">
-                <div class="bg-gray-750 p-4 rounded-lg border border-gray-650">
-                    <h3 class="text-sm font-semibold text-gray-300 mb-3 uppercase tracking-wider">Nova Disciplina/Professor</h3>
-                    
+                <div class="bg-gray-750 p-4 rounded-lg border border-gray-650 space-y-4">
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-3 text-sm">
                         <div>
-                            <label class="block text-xs text-gray-400 mb-1">Cód. Disciplina (Ex: Mat-Michel)</label>
+                            <label class="block text-xs text-gray-400 mb-1">Identificação / Disciplina (Ex: Mat-Michel)</label>
                             <input type="text" id="input-nome" class="w-full bg-gray-900 border border-gray-600 rounded px-3 py-2 text-white">
                         </div>
                         <div>
@@ -109,7 +116,7 @@
                             <input type="text" id="input-prof" class="w-full bg-gray-900 border border-gray-600 rounded px-3 py-2 text-white">
                         </div>
                         <div>
-                            <label class="block text-xs text-gray-400 mb-1">Área (Para bloqueio)</label>
+                            <label class="block text-xs text-gray-400 mb-1">Área (Para Reunião)</label>
                             <select id="input-area" class="w-full bg-gray-900 border border-gray-600 rounded px-3 py-2 text-white">
                                 <option value="Matemática">Matemática</option>
                                 <option value="Natureza">C. da Natureza</option>
@@ -118,60 +125,47 @@
                                 <option value="Interdisciplinar">Interdisciplinar</option>
                             </select>
                         </div>
-                        <div>
-                            <label class="block text-xs text-gray-400 mb-1">Turmas (Separe por vírgula)</label>
-                            <input type="text" id="input-turmas" class="w-full bg-gray-900 border border-gray-600 rounded px-3 py-2 text-white placeholder-gray-600" placeholder="1A, 2B">
-                        </div>
-
-                        <div class="col-span-1 md:col-span-2 mt-2 pt-3 border-t border-gray-600">
-                            <h4 class="text-xs font-semibold text-emerald-400 uppercase tracking-wider mb-2">Restrições Específicas</h4>
-                            <div class="grid grid-cols-1 md:grid-cols-3 gap-3">
-                                <div>
-                                    <label class="block text-[10px] text-gray-400 mb-1">Dia Fixo</label>
-                                    <select id="input-dia-fixo" class="w-full bg-gray-900 border border-gray-600 rounded px-2 py-1.5 text-white text-xs">
-                                        <option value="Qualquer">Qualquer Dia</option>
-                                        <option value="SEGUNDA">Segunda-feira</option>
-                                        <option value="TERÇA">Terça-feira</option>
-                                        <option value="QUARTA">Quarta-feira</option>
-                                        <option value="QUINTA">Quinta-feira</option>
-                                        <option value="SEXTA">Sexta-feira</option>
-                                    </select>
-                                </div>
-                                <div>
-                                    <label class="block text-[10px] text-gray-400 mb-1">Horário Fixo</label>
-                                    <select id="input-horario-fixo" class="w-full bg-gray-900 border border-gray-600 rounded px-2 py-1.5 text-white text-xs">
-                                        <option value="Qualquer">Qualquer Horário</option>
-                                        <option value="0">1º Horário</option>
-                                        <option value="1">2º Horário</option>
-                                        <option value="3">3º Horário</option>
-                                        <option value="4">4º Horário</option>
-                                        <option value="5">5º Horário</option>
-                                        <option value="7">6º Horário</option>
-                                        <option value="8">7º Horário</option>
-                                    </select>
-                                </div>
-                                <div>
-                                    <label class="block text-[10px] text-gray-400 mb-1">Máx. Aulas/Dia (Por Turma)</label>
-                                    <input type="number" id="input-max-aulas" value="2" min="1" max="5" class="w-full bg-gray-900 border border-gray-600 rounded px-2 py-1 text-white text-xs">
-                                </div>
+                        <div class="grid grid-cols-2 gap-2">
+                            <div>
+                                <label class="block text-xs text-gray-400 mb-1">Turma Alvo</label>
+                                <select id="input-turma-alvo" class="w-full bg-gray-900 border border-gray-600 rounded px-3 py-2 text-white"></select>
+                            </div>
+                            <div>
+                                <label class="block text-xs text-gray-400 mb-1">Aulas Semanais</label>
+                                <input type="number" id="input-ch" value="2" min="1" max="10" class="w-full bg-gray-900 border border-gray-600 rounded px-3 py-1.5 text-white">
                             </div>
                         </div>
                     </div>
+
+                    <div class="pt-3 border-t border-gray-600 space-y-3">
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div>
+                                <h4 class="text-xs font-semibold text-amber-400 uppercase mb-2">Dias Permitidos (Se nenhum for marcado, vale qualquer dia)</h4>
+                                <div id="checkbox-dias" class="flex flex-wrap gap-2"></div>
+                            </div>
+                            <div>
+                                <h4 class="text-xs font-semibold text-blue-400 uppercase mb-2">Horários Permitidos (Se nenhum for marcado, vale qualquer horário)</h4>
+                                <div id="checkbox-horarios" class="grid grid-cols-2 gap-1"></div>
+                            </div>
+                        </div>
+                        <div class="w-full md:w-1/3">
+                            <label class="block text-xs text-gray-400 mb-1">Máx. Aulas no mesmo Dia</label>
+                            <input type="number" id="input-max-aulas" value="2" min="1" max="5" class="w-full bg-gray-900 border border-gray-600 rounded px-3 py-1 text-white text-xs">
+                        </div>
+                    </div>
                     
-                    <button onclick="adicionarComponente()" class="mt-4 w-full bg-emerald-600 hover:bg-emerald-500 text-white font-bold py-2 rounded transition shadow">
-                        + Cadastrar na Base de Dados
+                    <button onclick="adicionarComponente()" class="w-full bg-emerald-600 hover:bg-emerald-500 text-white font-bold py-2 rounded transition shadow">
+                        + Salvar Configuração de Disciplina
                     </button>
                 </div>
 
                 <div>
-                    <h3 class="text-sm font-semibold text-gray-300 mb-2 uppercase tracking-wider">Base de Dados Atual</h3>
-                    <div id="lista-bd" class="space-y-2">
-                        </div>
+                    <h3 class="text-sm font-semibold text-gray-300 mb-2 uppercase tracking-wider">Disciplinas Cadastradas</h3>
+                    <div id="lista-bd" class="space-y-2"></div>
                 </div>
             </div>
-            
-            <div class="p-4 border-t border-gray-700 bg-gray-850 rounded-b-xl text-right">
-                <button onclick="fecharModalBD()" class="bg-gray-600 hover:bg-gray-500 text-white px-4 py-2 rounded transition">Concluir Edição</button>
+            <div class="p-4 border-t border-gray-700 bg-gray-850 text-right rounded-b-xl">
+                <button onclick="fecharModalBD()" class="bg-gray-600 hover:bg-gray-500 text-white px-4 py-2 rounded transition">Concluir</button>
             </div>
         </div>
     </div>
@@ -181,220 +175,223 @@
         const HORARIOS_TURNO_1 = ["7h30-8h20", "8h20-9h10", "LANCHE", "9h30-10h20", "10h20-11h10", "11h10-12h", "ALMOÇO", "12h50-13h40", "13h40-14h30"];
         const HORARIOS_TURNO_2 = ["15h30-16h20", "16h20-17h10", "LANCHE", "17h30-18h20", "18h20-19h10", "19h10-20h", "JANTAR", "20h20-21h20", "21h10-22h"];
 
+        let TURMAS = [];
         let COMPONENTES = [];
-
-        function carregarBancoDeDados() {
-            const dadosSalvos = localStorage.getItem("LiraPro_DB_V2");
-            if (dadosSalvos) {
-                COMPONENTES = JSON.parse(dadosSalvos);
-            } else {
-                COMPONENTES = [
-                    { nome: "Mat-Michel", prof: "Michel", area: "Matemática", turmas: ["3A", "2B", "2C"], diaFixo: "Qualquer", horarioFixo: "Qualquer", maxAulas: 2 }
-                ];
-                salvarBancoDeDados();
-            }
-        }
-
-        function salvarBancoDeDados() {
-            localStorage.setItem("LiraPro_DB_V2", JSON.stringify(COMPONENTES));
-            renderizarListaBD();
-        }
-
         let gradeTurno1 = {};
         let gradeTurno2 = {};
 
+        function carregarDados() {
+            TURMAS = JSON.parse(localStorage.getItem("LiraPro_Turmas")) || [
+                { nome: "1A", turno: 1 }, { nome: "2A", turno: 1 }, { nome: "3A", turno: 1 },
+                { nome: "2B", turno: 2 }, { nome: "2C", turno: 2 }, { nome: "3B", turno: 2 }
+            ];
+            COMPONENTES = JSON.parse(localStorage.getItem("LiraPro_DB_V3")) || [];
+            montarCheckboxesRestricoes();
+            atualizarSelectTurmas();
+            inicializarEstruturas();
+            renderizarGradesEmTela();
+        }
+
+        function salvarDados() {
+            localStorage.setItem("LiraPro_Turmas", JSON.stringify(TURMAS));
+            localStorage.setItem("LiraPro_DB_V3", JSON.stringify(COMPONENTES));
+            atualizarSelectTurmas();
+            renderizarListaBD();
+            renderizarListaTurmas();
+        }
+
         function inicializarEstruturas() {
             DIAS.forEach(dia => {
-                gradeTurno1[dia] = HORARIOS_TURNO_1.map(() => ({ "1A": null, "2A": null, "3A": null }));
-                gradeTurno2[dia] = HORARIOS_TURNO_2.map(() => ({ "2B": null, "2C": null, "3B": null }));
+                gradeTurno1[dia] = HORARIOS_TURNO_1.map(() => {
+                    let obj = {}; getTurmas(1).forEach(t => obj[t] = null); return obj;
+                });
+                gradeTurno2[dia] = HORARIOS_TURNO_2.map(() => {
+                    let obj = {}; getTurmas(2).forEach(t => obj[t] = null); return obj;
+                });
             });
         }
 
-        function abrirModalBD() {
-            document.getElementById("modal-bd").classList.remove("hidden");
-            document.getElementById("modal-bd").classList.add("flex");
-            renderizarListaBD();
+        function getTurmas(turno) { return TURMAS.filter(t => t.turno === parseInt(turno)).map(t => t.nome); }
+
+        // MÓDULO TURMAS
+        function abrirModalTurmas() { document.getElementById("modal-turmas").classList.replace("hidden", "flex"); renderizarListaTurmas(); }
+        function fecharModalTurmas() { document.getElementById("modal-turmas").classList.replace("flex", "hidden"); inicializarEstruturas(); renderizarGradesEmTela(); }
+        
+        function adicionarTurma() {
+            const nome = document.getElementById("input-nova-turma").value.trim().toUpperCase();
+            const turno = parseInt(document.getElementById("input-turno-turma").value);
+            if(!nome) return alert("Insira o nome da turma!");
+            if(TURMAS.some(t => t.nome === nome)) return alert("Turma já existe!");
+            TURMAS.push({ nome, turno });
+            salvarDados();
+            document.getElementById("input-nova-turma").value = "";
         }
 
-        function fecharModalBD() {
-            document.getElementById("modal-bd").classList.add("hidden");
-            document.getElementById("modal-bd").classList.remove("flex");
+        function removerTurma(nome) {
+            TURMAS = TURMAS.filter(t => t.nome !== nome);
+            COMPONENTES = COMPONENTES.filter(c => c.turma !== nome);
+            salvarDados();
         }
+
+        function renderizarListaTurmas() {
+            const container = document.getElementById("lista-turmas"); container.innerHTML = "";
+            TURMAS.forEach(t => {
+                let div = document.createElement("div");
+                div.className = "flex justify-between items-center bg-gray-700 p-2 rounded mb-1";
+                div.innerHTML = `<span>${t.nome} (${t.turno}º Turno)</span>
+                    <button onclick="removerTurma('${t.nome}')" class="text-red-400 hover:text-red-600 font-bold px-2">X</button>`;
+                container.appendChild(div);
+            });
+        }
+
+        function atualizarSelectTurmas() {
+            const select = document.getElementById("input-turma-alvo"); select.innerHTML = "";
+            TURMAS.forEach(t => select.innerHTML += `<option value="${t.nome}">${t.nome}</option>`);
+        }
+
+        // MÓDULO RESTRIÇÕES MÚLTIPLAS HTML
+        function montarCheckboxesRestricoes() {
+            const divDias = document.getElementById("checkbox-dias"); divDias.innerHTML = "";
+            DIAS.forEach(d => divDias.innerHTML += `<label class="inline-flex items-center bg-gray-900 px-2 py-1 rounded text-xs cursor-pointer"><input type="checkbox" name="rest-dia" value="${d}" class="mr-1"> ${d.substring(0,3)}</label>`);
+
+            const divHrs = document.getElementById("checkbox-horarios"); divHrs.innerHTML = "";
+            const labels = ["1º Hor.", "2º Hor.", "3º Hor.", "4º Hor.", "5º Hor.", "6º Hor.", "7º Hor."];
+            const indices = [0, 1, 3, 4, 5, 7, 8]; // Pulando índices dos intervalos
+            indices.forEach((val, i) => divHrs.innerHTML += `<label class="inline-flex items-center text-xs"><input type="checkbox" name="rest-hr" value="${val}" class="mr-1"> ${labels[i]}</label>`);
+        }
+
+        function abrirModalBD() { document.getElementById("modal-bd").classList.replace("hidden", "flex"); renderizarListaBD(); }
+        function fecharModalBD() { document.getElementById("modal-bd").classList.replace("flex", "hidden"); }
 
         function adicionarComponente() {
             const nome = document.getElementById("input-nome").value.trim();
             const prof = document.getElementById("input-prof").value.trim();
             const area = document.getElementById("input-area").value;
-            const turmasTexto = document.getElementById("input-turmas").value.trim();
-            
-            // Novos Campos
-            const diaFixo = document.getElementById("input-dia-fixo").value;
-            const horarioFixo = document.getElementById("input-horario-fixo").value;
+            const turma = document.getElementById("input-turma-alvo").value;
+            const ch = parseInt(document.getElementById("input-ch").value) || 2;
             const maxAulas = parseInt(document.getElementById("input-max-aulas").value) || 2;
 
-            if (!nome || !prof || !turmasTexto) {
-                alert("Preencha o Código, Professor e Turmas para cadastrar!");
-                return;
-            }
+            const diasMarcados = Array.from(document.querySelectorAll('input[name="rest-dia"]:checked')).map(el => el.value);
+            const hrsMarcadas = Array.from(document.querySelectorAll('input[name="rest-hr"]:checked')).map(el => el.value);
 
-            const turmasArray = turmasTexto.split(",").map(t => t.trim().toUpperCase());
+            if(!nome || !prof) return alert("Preencha Código e Professor!");
 
-            COMPONENTES.push({ nome, prof, area, turmas: turmasArray, diaFixo, horarioFixo, maxAulas });
-            salvarBancoDeDados();
+            COMPONENTES.push({ nome, prof, area, turma, ch, maxAulas, diasPermitidos: diasMarcados, hrsPermitidas: hrsMarcadas });
+            salvarDados();
 
-            // Reseta formulário visual
-            document.getElementById("input-nome").value = "";
-            document.getElementById("input-prof").value = "";
-            document.getElementById("input-turmas").value = "";
-            document.getElementById("input-dia-fixo").value = "Qualquer";
-            document.getElementById("input-horario-fixo").value = "Qualquer";
-            document.getElementById("input-max-aulas").value = "2";
+            document.getElementById("input-nome").value = ""; document.getElementById("input-prof").value = "";
         }
 
-        function removerComponente(index) {
-            if (confirm("Remover professor da base de dados?")) {
-                COMPONENTES.splice(index, 1);
-                salvarBancoDeDados();
-            }
-        }
+        function removerComponente(idx) { COMPONENTES.splice(idx, 1); salvarDados(); }
 
         function renderizarListaBD() {
-            const listaDiv = document.getElementById("lista-bd");
-            listaDiv.innerHTML = "";
-
-            if (COMPONENTES.length === 0) {
-                listaDiv.innerHTML = "<p class='text-xs text-gray-500 italic'>Nenhum professor cadastrado.</p>";
-                return;
-            }
-
-            COMPONENTES.forEach((comp, index) => {
-                let tagsRestricao = "";
-                if(comp.diaFixo !== "Qualquer") tagsRestricao += `<span class='bg-amber-900/50 text-amber-300 px-1.5 py-0.5 rounded ml-1'>${comp.diaFixo}</span>`;
-                if(comp.horarioFixo !== "Qualquer") tagsRestricao += `<span class='bg-blue-900/50 text-blue-300 px-1.5 py-0.5 rounded ml-1'>Hr. Fixo: ${comp.horarioFixo}</span>`;
-                
-                let div = document.createElement("div");
-                div.className = "flex justify-between items-center bg-gray-700 p-3 rounded border border-gray-600";
-                div.innerHTML = `
-                    <div class="text-xs">
-                        <strong class="text-indigo-300 text-sm">${comp.nome}</strong> 
-                        ${tagsRestricao}
-                        <span class="text-gray-400 block mt-1">Prof: ${comp.prof} | Área: ${comp.area} | Máx Aulas/Dia: ${comp.maxAulas || 2}</span>
-                        <span class="text-gray-400 block">Turmas: <span class="font-bold text-gray-100">${comp.turmas.join(", ")}</span></span>
+            const div = document.getElementById("lista-bd"); div.innerHTML = "";
+            COMPONENTES.forEach((c, idx) => {
+                let infoDias = c.diasPermitidos.length ? c.diasPermitidos.map(d=>d.substring(0,3)).join("/") : "Qualquer Dia";
+                let infoHrs = c.hrsPermitidas.length ? "Horários Travados" : "Qualquer Horário";
+                div.innerHTML += `<div class="bg-gray-700 p-2 text-xs rounded flex justify-between items-center border border-gray-600">
+                    <div>
+                        <b class="text-indigo-300 text-sm">${c.nome}</b> -> Turma: <span class="text-emerald-400 font-bold">${c.turma}</span> [C.H: ${c.ch} Aulas]<br>
+                        <span class="text-gray-400">Prof: ${c.prof} | Dias: ${infoDias} | Horários: ${infoHrs} | Limite: ${c.maxAulas}/dia</span>
                     </div>
-                    <button onclick="removerComponente(${index})" class="bg-red-900/60 hover:bg-red-600 text-red-200 px-3 py-1 rounded text-xs transition">
-                        Excluir
-                    </button>
-                `;
-                listaDiv.appendChild(div);
+                    <button onclick="removerComponente(${idx})" class="bg-red-900/80 p-1.5 rounded text-white hover:bg-red-600">Excluir</button>
+                </div>`;
             });
         }
 
-        function alternarVisualizacaoTurno() {
-            const turno = document.getElementById("select-turno").value;
-            if (turno === "1") {
-                document.getElementById("painel-turno-1").classList.remove("hidden");
-                document.getElementById("painel-turno-2").classList.add("hidden");
-            } else {
-                document.getElementById("painel-turno-1").classList.add("hidden");
-                document.getElementById("painel-turno-2").classList.remove("hidden");
-            }
-        }
-
+        // NOVO MOTOR REFORMULADO DE DISTRIBUIÇÃO SEM CONFLITOS
         function validarConflito(dia, indexHorario, turma, componente, turnoAlvo) {
             const prof = componente.prof;
-            const area = componente.area;
 
-            // 1. REGRAS DE REUNIÃO DE ÁREA
+            // 1. Reunião de Área (Turno 1, frames 7 e 8)
             if (turnoAlvo === 1 && (indexHorario === 7 || indexHorario === 8)) {
-                if (dia === "SEGUNDA" && area === "Natureza") return false;
-                if (dia === "TERÇA" && area === "Humanas") return false;
-                if (dia === "QUARTA" && area === "Linguagens") return false;
-                if (dia === "QUINTA" && area === "Matemática") return false;
+                if (dia === "SEGUNDA" && componente.area === "Natureza") return false;
+                if (dia === "TERÇA" && componente.area === "Humanas") return false;
+                if (dia === "QUARTA" && componente.area === "Linguagens") return false;
+                if (dia === "QUINTA" && componente.area === "Matemática") return false;
             }
 
-            // 2. CONFLITO DE CHOCAR HORÁRIO DO PROFESSOR
+            // 2. Professor Ocupado em qualquer outra turma do mesmo turno
             const gradeDoTurno = turnoAlvo === 1 ? gradeTurno1[dia][indexHorario] : gradeTurno2[dia][indexHorario];
             for (let t in gradeDoTurno) {
                 if (gradeDoTurno[t] && gradeDoTurno[t].prof === prof) return false;
             }
 
-            // 3. REGRAS ESPECÍFICAS DE CADASTRO
-            if (componente.diaFixo && componente.diaFixo !== "Qualquer" && dia !== componente.diaFixo) return false;
-            if (componente.horarioFixo && componente.horarioFixo !== "Qualquer" && indexHorario.toString() !== componente.horarioFixo) return false;
+            // 3. Validação das Múltiplas caixas de seleção
+            if (componente.diasPermitidos.length > 0 && !componente.diasPermitidos.includes(dia)) return false;
+            if (componente.hrsPermitidas.length > 0 && !componente.hrsPermitidas.includes(indexHorario.toString())) return false;
 
-            // 4. LIMITE DE AULAS POR DIA (Evitar 3 aulas seguidas se o limite for 2)
-            let contagemAulasHoje = 0;
-            const gradeCompletaDoDia = turnoAlvo === 1 ? gradeTurno1[dia] : gradeTurno2[dia];
-            
-            gradeCompletaDoDia.forEach(horarios => {
-                if (horarios[turma] && horarios[turma].nome === componente.nome) {
-                    contagemAulasHoje++;
-                }
-            });
+            // 4. Limite de aulas no mesmo dia para a turma
+            let contagemHoje = 0;
+            gradeDoTurno.forEach(h => { if(h && h[turma] && h[turma].nome === componente.nome) contagemHoje++; });
+            if (contagemHoje >= componente.maxAulas) return false;
 
-            const limiteAulas = componente.maxAulas || 2; // Padrão 2 se não existir
-            if (contagemAulasHoje >= limiteAulas) return false;
-
-            return true; // Se passar por todas as travas, o horário é válido!
+            return true;
         }
 
         function gerarGradeCompleta() {
-            if (COMPONENTES.length === 0) {
-                alert("Cadastre disciplinas e professores primeiro no botão '⚙️ Professores'!");
-                return;
-            }
-
             inicializarEstruturas();
+            
+            // Cria cópia de trabalho da Carga Horária de cada disciplina cadastrada
+            let chRestante = COMPONENTES.map(c => ({ ...c, aulasAlocadas: 0 }));
 
-            [1, 2].forEach(turno => {
-                const turmasDoTurno = turno === 1 ? ["1A", "2A", "3A"] : ["2B", "2C", "3B"];
-                const horariosDoTurno = turno === 1 ? HORARIOS_TURNO_1 : HORARIOS_TURNO_2;
-                const gradeAlvo = turno === 1 ? gradeTurno1 : gradeTurno2;
-
+            // Loop de tentativas sobre os dias e horários para escoar toda a carga horária
+            for (let tentativa = 0; tentativa < 5; tentativa++) { // 5 passadas aleatórias ajudam a fechar a grade sem travar
                 DIAS.forEach(dia => {
-                    horariosDoTurno.forEach((horario, idx) => {
-                        if (horario === "LANCHE" || horario === "ALMOÇO" || horario === "JANTAR") return;
+                    [1, 2].forEach(turno => {
+                        const horarios = turno === 1 ? HORARIOS_TURNO_1 : HORARIOS_TURNO_2;
+                        const gradeAlvo = turno === 1 ? gradeTurno1 : gradeTurno2;
+                        const turmasDoTurno = getTurmas(turno);
 
-                        if (dia === "QUARTA" && (idx === 0 || idx === 1)) {
-                            turmasDoTurno.forEach(t => {
-                                gradeAlvo[dia][idx][t] = { nome: "ELETIVA", prof: "Todos" };
-                            });
-                            return;
-                        }
+                        horarios.forEach((horario, idx) => {
+                            if (horario === "LANCHE" || horario === "ALMOÇO" || horario === "JANTAR") return;
 
-                        turmasDoTurno.forEach(turma => {
-                            const componentesValidos = COMPONENTES.filter(c => c.turmas.includes(turma));
-                            componentesValidos.sort(() => Math.random() - 0.5);
-
-                            for (let comp of componentesValidos) {
-                                if (validarConflito(dia, idx, turma, comp, turno)) {
-                                    gradeAlvo[dia][idx][turma] = comp;
-                                    break;
-                                }
+                            // Quarta-feira: Reserva de Eletivas Fixas
+                            if (dia === "QUARTA" && (idx === 0 || idx === 1)) {
+                                turmasDoTurno.forEach(t => gradeAlvo[dia][idx][t] = { nome: "ELETIVA", prof: "Todos" });
+                                return;
                             }
+
+                            turmasDoTurno.forEach(turma => {
+                                // Se a célula já estiver ocupada, passa direto
+                                if (gradeAlvo[dia][idx][turma] !== null) return;
+
+                                // Filtra disciplinas da turma que ainda precisam de aulas cumpridas
+                                let pendentes = chRestante.filter(c => c.turma === turma && c.aulasAlocadas < c.ch);
+                                pendentes.sort(() => Math.random() - 0.5); // Embaralha para pulverizar
+
+                                for (let comp of pendentes) {
+                                    if (validarConflito(dia, idx, turma, comp, turno)) {
+                                        gradeAlvo[dia][idx][turma] = { nome: comp.nome, prof: comp.prof };
+                                        comp.aulasAlocadas++;
+                                        break; 
+                                    }
+                                }
+                            });
                         });
                     });
                 });
-            });
-
+            }
             renderizarGradesEmTela();
         }
 
         function renderizarGradesEmTela() {
-            const tbody1 = document.getElementById("grid-body-turno-1");
-            tbody1.innerHTML = "";
+            const t1Turmas = getTurmas(1);
+            const h1 = document.getElementById("header-turno-1");
+            h1.innerHTML = `<th class="p-2 border border-gray-600 w-16">Dia</th><th class="p-2 border border-gray-600 w-24">Horário</th>`;
+            t1Turmas.forEach(t => h1.innerHTML += `<th class="p-2 border border-gray-600 bg-gray-900">${t}</th>`);
+
+            const tbody1 = document.getElementById("grid-body-turno-1"); tbody1.innerHTML = "";
             DIAS.forEach(dia => {
                 HORARIOS_TURNO_1.forEach((horario, idx) => {
-                    let tr = document.createElement("tr");
-                    tr.className = "hover:bg-gray-750 border-b border-gray-700/50";
+                    let tr = document.createElement("tr"); tr.className = "hover:bg-gray-750 border-b border-gray-700/50";
                     if (idx === 0) tr.innerHTML = `<td class="p-2 font-bold bg-gray-850 border-r border-gray-700" rowspan="${HORARIOS_TURNO_1.length}">${dia.substring(0,3)}</td>`;
-                    
                     tr.innerHTML += `<td class="p-1 text-gray-400 bg-gray-900/30 text-[10px] md:text-xs">${horario}</td>`;
 
                     if (horario === "LANCHE" || horario === "ALMOÇO") {
-                        tr.innerHTML += `<td colspan="3" class="bg-amber-950/40 text-amber-500 py-1 text-[10px] font-bold tracking-widest">${horario}</td>`;
+                        tr.innerHTML += `<td colspan="${t1Turmas.length}" class="bg-amber-950/40 text-amber-500 py-1 text-[10px] font-bold tracking-widest">${horario}</td>`;
                     } else {
-                        ["1A", "2A", "3A"].forEach(t => {
+                        t1Turmas.forEach(t => {
                             const aula = gradeTurno1[dia][idx][t];
                             let estilo = aula ? (aula.nome === "ELETIVA" ? "bg-amber-800/80 text-amber-100" : "bg-indigo-950/60 text-indigo-200") : "text-gray-600";
                             tr.innerHTML += `<td class="p-1 border-l border-gray-700/60 ${estilo}">${aula ? aula.nome : "-"}</td>`;
@@ -404,20 +401,23 @@
                 });
             });
 
-            const tbody2 = document.getElementById("grid-body-turno-2");
-            tbody2.innerHTML = "";
+            // Turno 2
+            const t2Turmas = getTurmas(2);
+            const h2 = document.getElementById("header-turno-2");
+            h2.innerHTML = `<th class="p-2 border border-gray-600 w-16">Dia</th><th class="p-2 border border-gray-600 w-24">Horário</th>`;
+            t2Turmas.forEach(t => h2.innerHTML += `<th class="p-2 border border-gray-600 bg-gray-900">${t}</th>`);
+
+            const tbody2 = document.getElementById("grid-body-turno-2"); tbody2.innerHTML = "";
             DIAS.forEach(dia => {
                 HORARIOS_TURNO_2.forEach((horario, idx) => {
-                    let tr = document.createElement("tr");
-                    tr.className = "hover:bg-gray-750 border-b border-gray-700/50";
+                    let tr = document.createElement("tr"); tr.className = "hover:bg-gray-750 border-b border-gray-700/50";
                     if (idx === 0) tr.innerHTML = `<td class="p-2 font-bold bg-gray-850 border-r border-gray-700" rowspan="${HORARIOS_TURNO_2.length}">${dia.substring(0,3)}</td>`;
-                    
                     tr.innerHTML += `<td class="p-1 text-gray-400 bg-gray-900/30 text-[10px] md:text-xs">${horario}</td>`;
 
                     if (horario === "LANCHE" || horario === "JANTAR") {
-                        tr.innerHTML += `<td colspan="3" class="bg-teal-950/40 text-teal-400 py-1 text-[10px] font-bold tracking-widest">${horario}</td>`;
+                        tr.innerHTML += `<td colspan="${t2Turmas.length}" class="bg-teal-950/40 text-teal-400 py-1 text-[10px] font-bold tracking-widest">${horario}</td>`;
                     } else {
-                        ["2B", "2C", "3B"].forEach(t => {
+                        t2Turmas.forEach(t => {
                             const aula = gradeTurno2[dia][idx][t];
                             let estilo = aula ? (aula.nome === "ELETIVA" ? "bg-amber-800/80 text-amber-100" : "bg-teal-950/40 text-teal-200") : "text-gray-600";
                             tr.innerHTML += `<td class="p-1 border-l border-gray-700/60 ${estilo}">${aula ? aula.nome : "-"}</td>`;
@@ -428,14 +428,15 @@
             });
         }
 
-        function limparGrade() {
-            inicializarEstruturas();
-            renderizarGradesEmTela();
+        function alternarVisualizacaoTurno() {
+            const v = document.getElementById("select-turno").value;
+            document.getElementById("painel-turno-1").classList.toggle("hidden", v !== "1");
+            document.getElementById("painel-turno-2").classList.toggle("hidden", v !== "2");
         }
 
-        carregarBancoDeDados();
-        inicializarEstruturas();
-        renderizarGradesEmTela();
+        function limparGrade() { inicializarEstruturas(); renderizarGradesEmTela(); }
+
+        window.onload = carregarDados;
     </script>
 </body>
 </html>
