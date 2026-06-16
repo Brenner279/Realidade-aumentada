@@ -6,64 +6,55 @@
     <title>LiraMunguba Pro - Gerador de Horários</title>
     <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
 </head>
-<body class="bg-gray-900 text-gray-100 font-sans antialiased">
+<body class="bg-gray-900 text-gray-100 font-sans antialiased h-screen flex flex-col">
 
-    <header class="bg-gray-800 border-b border-gray-700 p-4 shadow-md flex justify-between items-center">
-        <div class="flex items-center space-x-3">
-            <span class="text-2xl">📅</span>
-            <h1 class="text-xl font-bold tracking-wide text-indigo-400">LiraMunguba Pro</h1>
+    <header class="bg-gray-800 border-b border-gray-700 p-4 shadow-md flex justify-between items-center z-10 relative">
+        <div class="flex items-center space-x-2">
+            <span class="text-xl">📅</span>
+            <h1 class="text-lg md:text-xl font-bold tracking-wide text-indigo-400">LiraMunguba Pro</h1>
         </div>
         <div class="flex space-x-2">
-            <button onclick="gerarGradeCompleta()" class="bg-indigo-600 hover:bg-indigo-500 text-white font-semibold px-4 py-2 rounded-lg shadow transition duration-200">
-                ⚡ Gerar Grade Horária
+            <button onclick="gerarGradeCompleta()" class="bg-indigo-600 hover:bg-indigo-500 text-white text-sm md:text-base font-semibold px-3 py-2 rounded shadow transition duration-200">
+                ⚡ Gerar
             </button>
-            <button onclick="limparGrade()" class="bg-gray-700 hover:bg-gray-650 text-gray-350 px-4 py-2 rounded-lg transition duration-200">
+            <button onclick="limparGrade()" class="bg-gray-700 hover:bg-gray-600 text-gray-200 text-sm md:text-base px-3 py-2 rounded transition duration-200">
                 🧹 Limpar
             </button>
         </div>
     </header>
 
-    <main class="flex h-[calc(100vh-73px)] overflow-hidden">
+    <main class="flex-1 flex flex-col lg:flex-row overflow-hidden">
         
-        <aside class="w-80 bg-gray-800 border-r border-gray-700 p-4 overflow-y-auto space-y-6">
+        <aside class="w-full lg:w-80 bg-gray-800 border-b lg:border-r border-gray-700 p-4 overflow-y-auto max-h-48 lg:max-h-full space-y-4">
             <div>
-                <h2 class="text-sm font-semibold text-gray-400 uppercase tracking-wider mb-3">Selecione o Turno</h2>
+                <h2 class="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-2">Selecione o Turno</h2>
                 <select id="select-turno" onchange="alternarVisualizacaoTurno()" class="w-full bg-gray-700 border border-gray-600 rounded px-3 py-2 text-sm text-white focus:outline-none focus:border-indigo-500">
                     <option value="1">1º Turno (Matutino/Vespertino)</option>
                     <option value="2">2º Turno (Vespertino/Noturno)</option>
                 </select>
             </div>
 
-            <div>
-                <h2 class="text-sm font-semibold text-gray-400 uppercase tracking-wider mb-2">Regras de Reunião de Área (12h-15h)</h2>
+            <div class="hidden lg:block">
+                <h2 class="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-2">Regras de Reunião de Área (12h-15h)</h2>
                 <ul class="text-xs space-y-1 text-gray-400">
-                    [span_0](start_span)<li><span class="text-red-400 font-bold">Segunda:</span> C. da Natureza[span_0](end_span)</li>
-                    [span_1](start_span)<li><span class="text-red-400 font-bold">Terça:</span> C. Humanas[span_1](end_span)</li>
-                    [span_2](start_span)<li><span class="text-red-400 font-bold">Quarta:</span> Linguagens[span_2](end_span)</li>
-                    [span_3](start_span)<li><span class="text-red-400 font-bold">Quinta:</span> Matemática[span_3](end_span)</li>
+                    <li><span class="text-red-400 font-bold">Seg:</span> Natureza</li>
+                    <li><span class="text-red-400 font-bold">Ter:</span> Humanas</li>
+                    <li><span class="text-red-400 font-bold">Qua:</span> Linguagens</li>
+                    <li><span class="text-red-400 font-bold">Qui:</span> Matemática</li>
                 </ul>
-            </div>
-
-            <div>
-                <h3 class="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-2">Legenda de Cores</h3>
-                <div class="space-y-1 text-xs">
-                    <div class="flex items-center space-x-2"><span class="w-3 h-3 bg-amber-600 rounded"></span> <span>Eletivas Estáveis (Qua)</span></div>
-                    <div class="flex items-center space-x-2"><span class="w-3 h-3 bg-red-900/60 rounded"></span> <span>Bloqueio de Reunião</span></div>
-                    <div class="flex items-center space-x-2"><span class="w-3 h-3 bg-indigo-950 rounded"></span> <span>Aulas Alocadas</span></div>
-                </div>
             </div>
         </aside>
 
-        <section class="flex-1 p-6 overflow-auto">
+        <section class="flex-1 p-4 overflow-auto bg-gray-900">
             
-            <div id="painel-turno-1" class="bg-gray-800 border border-gray-700 rounded-xl p-4 shadow-lg">
-                [span_4](start_span)<h2 class="text-lg font-bold text-indigo-400 mb-4">1º Turno — Escola Munguba do Jari[span_4](end_span)</h2>
+            <div id="painel-turno-1" class="bg-gray-800 border border-gray-700 rounded-xl p-3 shadow-lg">
+                <h2 class="text-base font-bold text-indigo-400 mb-3">1º Turno — Escola Munguba do Jari</h2>
                 <div class="overflow-x-auto">
-                    <table class="min-w-full border-collapse border border-gray-700 text-xs text-center">
+                    <table class="w-full min-w-[600px] border-collapse border border-gray-700 text-xs text-center">
                         <thead>
                             <tr class="bg-gray-700 text-gray-200 uppercase text-[10px] tracking-wider">
-                                <th class="p-2 border border-gray-600">Dia</th>
-                                <th class="p-2 border border-gray-600">Horário</th>
+                                <th class="p-2 border border-gray-600 w-16">Dia</th>
+                                <th class="p-2 border border-gray-600 w-24">Horário</th>
                                 <th class="p-2 border border-gray-600 bg-gray-900">1º A</th>
                                 <th class="p-2 border border-gray-600 bg-gray-900">2º A</th>
                                 <th class="p-2 border border-gray-600 bg-gray-900">3º A</th>
@@ -74,14 +65,14 @@
                 </div>
             </div>
 
-            <div id="painel-turno-2" class="bg-gray-800 border border-gray-700 rounded-xl p-4 shadow-lg hidden">
-                [span_5](start_span)<h2 class="text-lg font-bold text-teal-400 mb-4">2º Turno — Escola Munguba do Jari[span_5](end_span)</h2>
+            <div id="painel-turno-2" class="bg-gray-800 border border-gray-700 rounded-xl p-3 shadow-lg hidden">
+                <h2 class="text-base font-bold text-teal-400 mb-3">2º Turno — Escola Munguba do Jari</h2>
                 <div class="overflow-x-auto">
-                    <table class="min-w-full border-collapse border border-gray-700 text-xs text-center">
+                    <table class="w-full min-w-[600px] border-collapse border border-gray-700 text-xs text-center">
                         <thead>
                             <tr class="bg-gray-700 text-gray-200 uppercase text-[10px] tracking-wider">
-                                <th class="p-2 border border-gray-600">Dia</th>
-                                <th class="p-2 border border-gray-600">Horário</th>
+                                <th class="p-2 border border-gray-600 w-16">Dia</th>
+                                <th class="p-2 border border-gray-600 w-24">Horário</th>
                                 <th class="p-2 border border-gray-600 bg-gray-900">2º B</th>
                                 <th class="p-2 border border-gray-600 bg-gray-900">2º C</th>
                                 <th class="p-2 border border-gray-600 bg-gray-900">3º B</th>
@@ -96,46 +87,43 @@
     </main>
 
     <script>
-        [span_6](start_span)[span_7](start_span)// CONFIGURAÇÕES BASE DO MODELO DA ESCOLA[span_6](end_span)[span_7](end_span)
+        // CONFIGURAÇÕES BASE
         const DIAS = ["SEGUNDA", "TERÇA", "QUARTA", "QUINTA", "SEXTA"];
         
         const HORARIOS_TURNO_1 = [
-            "7h30 - 8h20", "8h20 - 9h10", "LANCHE", 
-            "9h30 - 10h20", "10h20 - 11h10", "11h10 - 12h", 
-            ALMOCO = "ALMOÇO", "12h50 - 13h40", "13h40 - 14h30"
+            "7h30-8h20", "8h20-9h10", "LANCHE", 
+            "9h30-10h20", "10h20-11h10", "11h10-12h", 
+            "ALMOÇO", "12h50-13h40", "13h40-14h30"
         ];
 
         const HORARIOS_TURNO_2 = [
-            "15h30 - 16h20", "16h20 - 17h10", "LANCHE", 
-            "17h30 - 18h20", "18h20 - 19h10", "19h10 - 20h", 
-            JANTAR = "JANTAR", "20h20 - 21h20", "21h10 - 22h"
+            "15h30-16h20", "16h20-17h10", "LANCHE", 
+            "17h30-18h20", "18h20-19h10", "19h10-20h", 
+            "JANTAR", "20h20-21h20", "21h10-22h"
         ];
 
-        [span_8](start_span)[span_9](start_span)// BANCO DE DADOS EM JAVASCRIPT — CARGA HORÁRIA DO SEU PDF[span_8](end_span)[span_9](end_span)
+        // BANCO DE DADOS (Exemplo da sua matriz)
         const COMPONENTES = [
-            [span_10](start_span)[span_11](start_span){ nome: "Mat-Michel", prof: "Michel", area: "Matemática", turmas: ["3A", "2B", "2C"] },[span_10](end_span)[span_11](end_span)
-            [span_12](start_span)[span_13](start_span){ nome: "Pi2Mat-Michel", prof: "Michel", area: "Matemática", turmas: ["2A", "2F", "2E"] },[span_12](end_span)[span_13](end_span)
-            [span_14](start_span)[span_15](start_span){ nome: "Hist-Carolina", prof: "Carolina", area: "Humanas", turmas: ["1A", "3B"] },[span_14](end_span)[span_15](end_span)
-            [span_16](start_span)[span_17](start_span){ nome: "L.Port-Milene", prof: "Milene", area: "Linguagens", turmas: ["1A", "2C"] },[span_16](end_span)[span_17](end_span)
-            [span_18](start_span)[span_19](start_span){ nome: "Fis-Jeferson", prof: "Jeferson", area: "Natureza", turmas: ["1A", "3A"] },[span_18](end_span)[span_19](end_span)
-            [span_20](start_span)[span_21](start_span){ nome: "PV-Maira", prof: "Maira", area: "Humanas", turmas: ["3A", "2B", "2C", "2E"] },[span_20](end_span)[span_21](end_span)
-            [span_22](start_span)[span_23](start_span){ nome: "L.Port-Adriana", prof: "Adriana", area: "Linguagens", turmas: ["3A", "2B", "3B", "3D"] },[span_22](end_span)[span_23](end_span)
-            [span_24](start_span){ nome: "Mat-Cherry", prof: "Cherry", area: "Matemática", turmas: ["2D", "2F", "3C"] }[span_24](end_span)
+            { nome: "Mat-Michel", prof: "Michel", area: "Matemática", turmas: ["3A", "2B", "2C"] },
+            { nome: "Pi2Mat-Michel", prof: "Michel", area: "Matemática", turmas: ["2A", "2F", "2E"] },
+            { nome: "Hist-Carolina", prof: "Carolina", area: "Humanas", turmas: ["1A", "3B"] },
+            { nome: "L.Port-Milene", prof: "Milene", area: "Linguagens", turmas: ["1A", "2C"] },
+            { nome: "Fis-Jeferson", prof: "Jeferson", area: "Natureza", turmas: ["1A", "3A"] },
+            { nome: "PV-Maira", prof: "Maira", area: "Humanas", turmas: ["3A", "2B", "2C", "2E"] },
+            { nome: "L.Port-Adriana", prof: "Adriana", area: "Linguagens", turmas: ["3A", "2B", "3B", "3D"] },
+            { nome: "Mat-Cherry", prof: "Cherry", area: "Matemática", turmas: ["2A", "3C"] }
         ];
 
-        // Matrizes vazias de armazenamento da grade calculada
         let gradeTurno1 = {};
         let gradeTurno2 = {};
 
-        // Inicializa as estruturas limpando tudo ao carregar a página
         function inicializarEstruturas() {
             DIAS.forEach(dia => {
-                gradeTurno1[dia] = HORARIOS_TURNO_1.map(() => ({ "1A": "", "2A": "", "3A": "" }));
-                gradeTurno2[dia] = HORARIOS_TURNO_2.map(() => ({ "2B": "", "2C": "", "3B": "" }));
+                gradeTurno1[dia] = HORARIOS_TURNO_1.map(() => ({ "1A": null, "2A": null, "3A": null }));
+                gradeTurno2[dia] = HORARIOS_TURNO_2.map(() => ({ "2B": null, "2C": null, "3B": null }));
             });
         }
 
-        // Alternar visualização entre 1º e 2º turno no select da Sidebar
         function alternarVisualizacaoTurno() {
             const turno = document.getElementById("select-turno").value;
             if (turno === "1") {
@@ -147,35 +135,31 @@
             }
         }
 
-        [span_25](start_span)// FUNÇÃO DE VALIDAÇÃO (O coração do motor contra conflitos)[span_25](end_span)
         function validarConflito(dia, indexHorario, turma, componente, turnoAlvo) {
             const prof = componente.prof;
             const area = componente.area;
 
-            [span_26](start_span)// REGRA 1: Bloqueios fixos de Reunião de Área (12h às 15h)[span_26](end_span)
-            [span_27](start_span)// No turno 1 afeta os horários pós-almoço (índices 7 e 8)[span_27](end_span)
+            // Bloqueio de Reunião de Área (Pós-Almoço no 1º Turno)
             if (turnoAlvo === 1 && (indexHorario === 7 || indexHorario === 8)) {
-                [span_28](start_span)if (dia === "SEGUNDA" && area === "Natureza") return false;[span_28](end_span)
-                [span_29](start_span)if (dia === "TERÇA" && area === "Humanas") return false;[span_29](end_span)
-                [span_30](start_span)if (dia === "QUARTA" && area === "Linguagens") return false;[span_30](end_span)
-                [span_31](start_span)if (dia === "QUINTA" && area === "Matemática") return false;[span_31](end_span)
+                if (dia === "SEGUNDA" && area === "Natureza") return false;
+                if (dia === "TERÇA" && area === "Humanas") return false;
+                if (dia === "QUARTA" && area === "Linguagens") return false;
+                if (dia === "QUINTA" && area === "Matemática") return false;
             }
 
-            // REGRA 2: Checar se o professor já está dando aula em outra sala nesse mesmo tempo
+            // Checa se professor já está em outra turma no mesmo horário
             const gradeDoTurno = turnoAlvo === 1 ? gradeTurno1[dia][indexHorario] : gradeTurno2[dia][indexHorario];
             for (let t in gradeDoTurno) {
                 if (gradeDoTurno[t] && gradeDoTurno[t].prof === prof) {
-                    return false; // Conflito! Professor ocupado.
+                    return false;
                 }
             }
             return true;
         }
 
-        [span_32](start_span)[span_33](start_span)// ALGORITMO DE DISTRIBUIÇÃO AUTOMÁTICA (Processamento Limpo)[span_32](end_span)[span_33](end_span)
         function gerarGradeCompleta() {
             inicializarEstruturas();
 
-            // Executa a alocação para ambos os turnos
             [1, 2].forEach(turno => {
                 const turmasDoTurno = turno === 1 ? ["1A", "2A", "3A"] : ["2B", "2C", "3B"];
                 const horariosDoTurno = turno === 1 ? HORARIOS_TURNO_1 : HORARIOS_TURNO_2;
@@ -183,25 +167,25 @@
 
                 DIAS.forEach(dia => {
                     horariosDoTurno.forEach((horario, idx) => {
-                        // Ignora os frames de refeição e lanches na alocação mecânica
                         if (horario === "LANCHE" || horario === "ALMOÇO" || horario === "JANTAR") return;
 
-                        [span_34](start_span)[span_35](start_span)// TRAVA DA QUARTA-FEIRA: Eletivas Globais no 1º e 2º Horário[span_34](end_span)[span_35](end_span)
                         if (dia === "QUARTA" && (idx === 0 || idx === 1)) {
                             turmasDoTurno.forEach(t => {
-                                [span_36](start_span)[span_37](start_span)gradeAlvo[dia][idx][t] = { nome: "🚨 ELETIVA", prof: "Todos", area: "Interdisciplinar" };[span_36](end_span)[span_37](end_span)
+                                gradeAlvo[dia][idx][t] = { nome: "ELETIVA", prof: "Todos" };
                             });
                             return;
                         }
 
-                        // Tenta encaixar uma disciplina do banco de dados que pertença àquela turma
                         turmasDoTurno.forEach(turma => {
                             const componentesValidos = COMPONENTES.filter(c => c.turmas.includes(turma));
                             
+                            // Embaralha para não gerar a mesma grade sempre
+                            componentesValidos.sort(() => Math.random() - 0.5);
+
                             for (let comp of componentesValidos) {
                                 if (validarConflito(dia, idx, turma, comp, turno)) {
                                     gradeAlvo[dia][idx][turma] = comp;
-                                    break; // Alocado com sucesso, passa para a próxima coluna
+                                    break;
                                 }
                             }
                         });
@@ -212,59 +196,49 @@
             renderizarGradesEmTela();
         }
 
-        // RENDERIZADOR HTML (Injeta os resultados dinamicamente no esqueleto)
         function renderizarGradesEmTela() {
-            // Renderiza Turno 1
+            // Turno 1
             const tbody1 = document.getElementById("grid-body-turno-1");
             tbody1.innerHTML = "";
-            
             DIAS.forEach(dia => {
                 HORARIOS_TURNO_1.forEach((horario, idx) => {
                     let tr = document.createElement("tr");
                     tr.className = "hover:bg-gray-750 border-b border-gray-700/50";
-
-                    // Agrupamento do dia da semana na primeira linha do bloco
-                    if (idx === 0) {
-                        tr.innerHTML = `<td class="p-2 font-bold bg-gray-850 border-r border-gray-700" rowspan="${HORARIOS_TURNO_1.length}">${dia}</td>`;
-                    }
-
-                    tr.innerHTML += `<td class="p-2 text-gray-400 bg-gray-900/30 text-left pl-3">${horario}</td>`;
+                    if (idx === 0) tr.innerHTML = `<td class="p-2 font-bold bg-gray-850 border-r border-gray-700" rowspan="${HORARIOS_TURNO_1.length}">${dia.substring(0,3)}</td>`;
+                    
+                    tr.innerHTML += `<td class="p-1 text-gray-400 bg-gray-900/30 text-[10px] md:text-xs">${horario}</td>`;
 
                     if (horario === "LANCHE" || horario === "ALMOÇO") {
-                        tr.innerHTML += `<td colspan="3" class="bg-amber-950/40 font-semibold tracking-widest text-amber-500 py-1 text-center">${horario === "LANCHE" ? "☕ INTERVALO" : "🍽️ ALMOÇO"}</td>`;
+                        tr.innerHTML += `<td colspan="3" class="bg-amber-950/40 text-amber-500 py-1 text-[10px] font-bold tracking-widest">${horario}</td>`;
                     } else {
                         ["1A", "2A", "3A"].forEach(t => {
                             const aula = gradeTurno1[dia][idx][t];
-                            let estiloCelula = aula ? (aula.nome.includes("ELETIVA") ? "bg-amber-800/80 text-amber-200" : "bg-indigo-950/60 text-indigo-200 font-medium") : "text-gray-600 italic";
-                            tr.innerHTML += `<td class="p-2 border-l border-gray-700/60 ${estiloCelula}">${aula ? aula.nome : "Vago"}</td>`;
+                            let estilo = aula ? (aula.nome === "ELETIVA" ? "bg-amber-800/80 text-amber-100" : "bg-indigo-950/60 text-indigo-200") : "text-gray-600";
+                            tr.innerHTML += `<td class="p-1 border-l border-gray-700/60 ${estilo}">${aula ? aula.nome : "-"}</td>`;
                         });
                     }
                     tbody1.appendChild(tr);
                 });
             });
 
-            // Renderiza Turno 2
+            // Turno 2
             const tbody2 = document.getElementById("grid-body-turno-2");
             tbody2.innerHTML = "";
-
             DIAS.forEach(dia => {
                 HORARIOS_TURNO_2.forEach((horario, idx) => {
                     let tr = document.createElement("tr");
                     tr.className = "hover:bg-gray-750 border-b border-gray-700/50";
-
-                    if (idx === 0) {
-                        tr.innerHTML = `<td class="p-2 font-bold bg-gray-850 border-r border-gray-700" rowspan="${HORARIOS_TURNO_2.length}">${dia}</td>`;
-                    }
-
-                    tr.innerHTML += `<td class="p-2 text-gray-400 bg-gray-900/30 text-left pl-3">${horario}</td>`;
+                    if (idx === 0) tr.innerHTML = `<td class="p-2 font-bold bg-gray-850 border-r border-gray-700" rowspan="${HORARIOS_TURNO_2.length}">${dia.substring(0,3)}</td>`;
+                    
+                    tr.innerHTML += `<td class="p-1 text-gray-400 bg-gray-900/30 text-[10px] md:text-xs">${horario}</td>`;
 
                     if (horario === "LANCHE" || horario === "JANTAR") {
-                        tr.innerHTML += `<td colspan="3" class="bg-teal-950/40 font-semibold tracking-widest text-teal-400 py-1 text-center">${horario === "LANCHE" ? "☕ INTERVALO" : "🍛 JANTAR REFEITÓRIO"}</td>`;
+                        tr.innerHTML += `<td colspan="3" class="bg-teal-950/40 text-teal-400 py-1 text-[10px] font-bold tracking-widest">${horario}</td>`;
                     } else {
                         ["2B", "2C", "3B"].forEach(t => {
                             const aula = gradeTurno2[dia][idx][t];
-                            let estiloCelula = aula ? (aula.nome.includes("ELETIVA") ? "bg-amber-800/80 text-amber-200" : "bg-teal-950/40 text-teal-200 font-medium") : "text-gray-600 italic";
-                            tr.innerHTML += `<td class="p-2 border-l border-gray-700/60 ${estiloCelula}">${aula ? aula.nome : "Vago"}</td>`;
+                            let estilo = aula ? (aula.nome === "ELETIVA" ? "bg-amber-800/80 text-amber-100" : "bg-teal-950/40 text-teal-200") : "text-gray-600";
+                            tr.innerHTML += `<td class="p-1 border-l border-gray-700/60 ${estilo}">${aula ? aula.nome : "-"}</td>`;
                         });
                     }
                     tbody2.appendChild(tr);
@@ -272,13 +246,11 @@
             });
         }
 
-        // Limpar visualização
         function limparGrade() {
             inicializarEstruturas();
             renderizarGradesEmTela();
         }
 
-        // Executa a limpeza inicial estrutural ao carregar o sistema
         inicializarEstruturas();
         renderizarGradesEmTela();
     </script>
