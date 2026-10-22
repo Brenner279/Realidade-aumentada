@@ -6,7 +6,7 @@
 <script src="https://aframe.io/releases/1.6.0/aframe.min.js"></script>
 <script src="https://cdn.jsdelivr.net/gh/AR-js-org/AR.js@3.4.7/aframe/build/aframe-ar.js"></script>
 <style>
-:root{font-family:Inter,system-ui,-apple-system,Segoe UI,sans-serif;color:#f8fafc;background:#07111f;color-scheme:dark}*{box-sizing:border-box}body{margin:0}header{backdrop-filter:blur(14px);background:linear-gradient(110deg,#07111ff5,#102a43ee);box-shadow:0 8px 30px #0005}h1{letter-spacing:.02em;text-shadow:0 0 22px #38bdf855}.panel{background:linear-gradient(160deg,#101f33f7,#0b1526f5);border-color:#38bdf866;box-shadow:0 14px 40px #0009,0 0 24px #0284c722}button{background:linear-gradient(135deg,#0284c7,#2563eb);box-shadow:0 4px 12px #0284c733;transition:transform .15s,filter .15s}button:hover{filter:brightness(1.12);transform:translateY(-1px)}select{border-color:#3b526c} .formula{border:1px solid #334b68;background:linear-gradient(135deg,#162a43,#101c2e)}.topnote{display:inline-block;left:50%;right:auto;transform:translateX(-50%);width:max-content;max-width:calc(100% - 24px);padding:9px 14px;border:1px solid #7dd3fc66;border-radius:999px;background:#07111fc9;color:#e0f2fe;backdrop-filter:blur(8px)}header{position:fixed;z-index:5;top:0;left:0;right:0;padding:12px 16px;background:#0f172aeF;border-bottom:1px solid #334155}h1{font-size:clamp(1.1rem,4vw,1.5rem);margin:0;color:#7dd3fc}header p{margin:3px 0 0;font-size:.82rem;color:#cbd5e1}.panel{position:fixed;z-index:5;left:10px;right:10px;bottom:10px;max-height:68vh;overflow:auto;background:#111d30f5;border:1px solid #475569;border-radius:16px;padding:14px;box-shadow:0 8px 28px #0008}.row{display:flex;gap:8px;flex-wrap:wrap;align-items:center}.field{display:flex;flex-direction:column;gap:5px;flex:1;min-width:140px}label{font-size:.82rem;color:#cbd5e1}select,input{width:100%;padding:10px;border-radius:9px;border:1px solid #475569;background:#0f172a;color:#fff}button{border:0;border-radius:10px;background:#0284c7;color:#fff;padding:11px 13px;font-weight:700;cursor:pointer;min-height:42px}button.secondary{background:#334155}button:disabled{opacity:.45;cursor:not-allowed}.status{font-size:.82rem;margin:0 0 8px;color:#fde68a}.status.ok{color:#86efac}.formula{background:#1e293b;border-radius:10px;padding:10px;margin:10px 0;font-size:.9rem}.answers{display:grid;grid-template-columns:1fr 1fr;gap:7px;margin-top:8px}.answer{border:1px solid #475569;background:#172337;text-align:left}.answer.selected{outline:2px solid #38bdf8;background:#075985}.feedback{padding:10px;border-radius:9px;margin-top:8px;font-size:.9rem}.help{font-size:.75rem;line-height:1.4;color:#cbd5e1;margin:9px 0 0}.tiny{font-size:.75rem;color:#cbd5e1}#readout{font-size:.88rem;line-height:1.5}a{color:#7dd3fc}@media(min-width:850px){.panel{width:390px;right:16px;bottom:16px;max-height:75vh}.topnote{top:82px}}.topnote{position:fixed;z-index:4;top:85px;left:12px;right:12px;text-align:center;text-shadow:0 2px 4px #000;font-size:.8rem;pointer-events:none}
+:root{font-family:Inter,system-ui,-apple-system,Segoe UI,sans-serif;color:#f8fafc;background:#07111f;color-scheme:dark}*{box-sizing:border-box}body{margin:0}header{backdrop-filter:blur(14px);background:linear-gradient(110deg,#07111ff5,#102a43ee);box-shadow:0 8px 30px #0005}h1{letter-spacing:.02em;text-shadow:0 0 22px #38bdf855}.panel{background:linear-gradient(160deg,#101f33f7,#0b1526f5);border-color:#38bdf866;box-shadow:0 14px 40px #0009,0 0 24px #0284c722}button{background:linear-gradient(135deg,#0284c7,#2563eb);box-shadow:0 4px 12px #0284c733;transition:transform .15s,filter .15s}button:hover{filter:brightness(1.12);transform:translateY(-1px)}select{border-color:#3b526c} .formula{border:1px solid #334b68;background:linear-gradient(135deg,#162a43,#101c2e)}.topnote{display:inline-block;left:50%;right:auto;transform:translateX(-50%);width:max-content;max-width:calc(100% - 24px);padding:9px 14px;border:1px solid #7dd3fc66;border-radius:999px;background:#07111fc9;color:#e0f2fe;backdrop-filter:blur(8px)}header{position:fixed;z-index:5;top:0;left:0;right:0;padding:12px 16px;background:#0f172aeF;border-bottom:1px solid #334155}h1{font-size:clamp(1.1rem,4vw,1.5rem);margin:0;color:#7dd3fc}header p{margin:3px 0 0;font-size:.82rem;color:#cbd5e1}.panel{position:fixed;z-index:5;left:10px;right:10px;bottom:10px;max-height:68vh;overflow:auto;background:#111d30f5;border:1px solid #475569;border-radius:16px;padding:14px;box-shadow:0 8px 28px #0008}.row{display:flex;gap:8px;flex-wrap:wrap;align-items:center}.field{display:flex;flex-direction:column;gap:5px;flex:1;min-width:140px}label{font-size:.82rem;color:#cbd5e1}select,input{width:100%;padding:10px;border-radius:9px;border:1px solid #475569;background:#0f172a;color:#fff}button{border:0;border-radius:10px;background:#0284c7;color:#fff;padding:11px 13px;font-weight:700;cursor:pointer;min-height:42px}button.secondary{background:#334155}button:disabled{opacity:.45;cursor:not-allowed}.status{font-size:.82rem;margin:0 0 8px;color:#fde68a}.status.ok{color:#86efac}.formula{background:#1e293b;border-radius:10px;padding:10px;margin:10px 0;font-size:.9rem}.answers{display:grid;grid-template-columns:1fr;gap:7px;margin-top:8px}.question-card{border:1px solid #38bdf866;border-radius:14px;padding:12px;margin-top:12px;background:linear-gradient(145deg,#10243a,#0a1424)}.question-title{font-weight:800;font-size:1rem;margin:0 0 8px;color:#e0f2fe}.area-card{border-top:3px solid #38bdf8}.perimeter-card{border-top:3px solid #a78bfa}.answer{min-height:44px;border:1px solid #475569;background:#172337;text-align:left}.feedback{padding:9px;border-radius:9px;margin-top:8px;font-size:.9rem;background:#1e293b}.feedback.good{background:#14532d;color:#dcfce7}.feedback.try{background:#713f12;color:#fef3c7}.answer{border:1px solid #475569;background:#172337;text-align:left}.answer.selected{outline:2px solid #38bdf8;background:#075985}.feedback{padding:10px;border-radius:9px;margin-top:8px;font-size:.9rem}.help{font-size:.75rem;line-height:1.4;color:#cbd5e1;margin:9px 0 0}.tiny{font-size:.75rem;color:#cbd5e1}#readout{font-size:.88rem;line-height:1.5}a{color:#7dd3fc}@media(min-width:850px){.panel{width:390px;right:16px;bottom:16px;max-height:75vh}.topnote{top:82px}}.topnote{position:fixed;z-index:4;top:85px;left:12px;right:12px;text-align:center;text-shadow:0 2px 4px #000;font-size:.8rem;pointer-events:none}
 </style>
 </head>
 <body>
@@ -19,16 +19,22 @@
 <div class="field"><label for="shape">Figura geométrica</label><select id="shape"><option value="triangle">Triângulo (3 pontos)</option><option value="trapezoid">Trapézio (4 pontos)</option><option value="square">Quadrado (4 pontos)</option><option value="rhombus">Losango (4 pontos)</option><option value="circle">Círculo (8 pontos)</option></select></div>
 </div>
 <div class="row" style="margin-top:8px">
-<div class="field"><label for="task">Desafio matemático</label><select id="task"><option value="area">Área</option><option value="perimeter">Perímetro</option></select></div>
+<div class="field"><label>Desafios após montar</label><div class="tiny">2 perguntas • 3 alternativas cada</div></div>
 <button id="build">Montar / atualizar figura</button>
 </div>
 <div class="formula" id="formula">📐 Fórmula: selecione uma figura e monte os pontos.</div>
 <div id="readout">📍 Marcadores reconhecidos: <strong id="count">0</strong> de 12. Posicione os cartões na mesa e mantenha-os visíveis.</div>
 <div id="quiz" hidden>
-<p><strong id="question">Qual é a área da figura?</strong></p>
-<div class="answers" id="answers"></div>
-<div class="row" style="margin-top:8px"><button id="confirm" disabled>Confirmar resposta</button><button class="secondary" id="retry" hidden>Tentar novamente</button></div>
-<div id="feedback" aria-live="polite"></div>
+<div class="question-card area-card">
+<p class="question-title">📐 Pergunta 1 — Qual é a área desta figura?</p>
+<div class="answers" id="areaAnswers"></div>
+<div class="feedback" id="areaFeedback" aria-live="polite">Escolha uma alternativa.</div>
+</div>
+<div class="question-card perimeter-card">
+<p class="question-title">📏 Pergunta 2 — Qual é o perímetro desta figura?</p>
+<div class="answers" id="perimeterAnswers"></div>
+<div class="feedback" id="perimeterFeedback" aria-live="polite">Escolha uma alternativa.</div>
+</div>
 </div>
 <p class="help">Unidade de medida: centímetros. A escala depende do tamanho físico informado ao rastreador (marcadores de 4 cm). Use marcadores Barcode distintos e imprima cada cartão com 4 cm de largura. Para maior precisão, mantenha a câmera quase perpendicular à mesa e evite sombras e reflexos.</p>
 <p class="help"><a href="marcadores.html">Abrir guia de marcadores e impressão</a></p>
@@ -136,24 +142,27 @@
    }
    return {area,perimeter,sides,formula};
  }
- function optionsFor(value){
-   const candidates=[value, value*.5, value*1.5, value+10, Math.max(1,value-5),value*2];
-   const uniq=[];candidates.forEach(n=>{if(Number.isFinite(n)&&n>=0&&!uniq.some(x=>Math.abs(x-n)<.02))uniq.push(n)});
-   if(uniq.length<4)uniq.push(value+3,value+7);
-   const out=uniq.slice(0,4).sort(()=>Math.random()-.5);
-   return out;
- }
- function buildQuiz(result,shape,task){
-   correctValue=task==='area'?result.area:result.perimeter;selectedAnswer=null;
-   $('question').textContent='Qual é '+(task==='area'?'a área':'o perímetro')+' desta figura?';
-   $('formula').textContent='Fórmula de referência: '+result.formula;
-   $('answers').innerHTML='';
-   optionsFor(correctValue).forEach(n=>{
-     const b=document.createElement('button');b.className='answer';b.type='button';b.textContent=n.toFixed(1).replace('.',',')+(task==='area'?' cm²':' cm');
-     b.addEventListener('click',()=>{selectedAnswer=n;document.querySelectorAll('.answer').forEach(x=>x.classList.remove('selected'));b.classList.add('selected');$('confirm').disabled=false;$('feedback').innerHTML='';$('retry').hidden=true});
-     $('answers').appendChild(b);
+ function renderQuestion(answerId,feedbackId,value,task){
+   const box=$(answerId),feedback=$(feedbackId);box.innerHTML='';feedback.className='feedback';feedback.textContent='Escolha uma das três alternativas.';
+   const unit=task==='area'?' cm²':' cm';
+   const candidates=[value,value*0.7,value*1.3].map(n=>Math.max(0,n));
+   for(let i=candidates.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[candidates[i],candidates[j]]=[candidates[j],candidates[i]]}
+   candidates.forEach(n=>{
+     const btn=document.createElement('button');btn.className='answer';btn.type='button';btn.textContent=n.toFixed(1).replace('.',',')+unit;
+     btn.addEventListener('click',()=>{
+       const correct=Math.abs(n-value)<Math.max(.15,value*.035);
+       feedback.className='feedback '+(correct?'good':'try');
+       feedback.textContent=correct?'✓ Resposta correta! Muito bem!':'Ainda não. Observe as medidas e tente outra alternativa.';
+       if(correct){box.querySelectorAll('button').forEach(x=>x.disabled=true);btn.classList.add('selected')}
+     });
+     box.appendChild(btn);
    });
-   $('quiz').hidden=false;$('confirm').disabled=true;$('feedback').innerHTML='';$('retry').hidden=true;
+ }
+ function buildQuiz(result,shape){
+   $('formula').textContent='📐 Fórmulas: '+result.formula;
+   renderQuestion('areaAnswers','areaFeedback',result.area,'area');
+   renderQuestion('perimeterAnswers','perimeterFeedback',result.perimeter,'perimeter');
+   $('quiz').hidden=false;
  }
  function mount(){
    const shape=$('shape').value,points=getPoints();
@@ -161,21 +170,12 @@
    currentFigure=points;makeLine(points,true);
    const result=calc(points,shape);
    $('readout').innerHTML='<strong>'+labels[shape]+'</strong> • pontos usados: '+points.map(p=>p.id).join(', ')+'.<br>Perímetro estimado: '+result.perimeter.toFixed(1).replace('.',',')+' cm<br>Área estimada: '+result.area.toFixed(1).replace('.',',')+' cm²';
-   if($('mode').value==='desafio'){$('task').value=Math.random()<.5?'area':'perimeter'}
-   buildQuiz(result,shape,$('task').value);
+   buildQuiz(result,shape);
    $('status').textContent='Figura conectada. Confira os lados e resolva o desafio.';$('status').classList.add('ok');
  }
  $('build').addEventListener('click',mount);
- $('mode').addEventListener('change',()=>{if($('mode').value==='desafio'){$('task').disabled=true;$('task').value=Math.random()<.5?'area':'perimeter'}else $('task').disabled=false});
+ $('mode').addEventListener('change',()=>{/* Ambos os desafios aparecem em todos os modos. */});
  $('shape').addEventListener('change',()=>{clearOverlay();$('quiz').hidden=true;$('formula').textContent='Mostre os marcadores necessários e toque em “Montar / atualizar figura”.'});
- $('confirm').addEventListener('click',()=>{
-   if(selectedAnswer===null)return;
-   const correct=Math.abs(selectedAnswer-correctValue)<Math.max(.15,correctValue*.035);
-   $('feedback').className='feedback';$('feedback').style.background=correct?'#14532d':'#713f12';
-   $('feedback').textContent=correct?'Resposta correta! Muito bem.':'Ainda não. Confira a fórmula e tente novamente.';
-   $('retry').hidden=correct;$('confirm').disabled=true;
- });
- $('retry').addEventListener('click',()=>{selectedAnswer=null;document.querySelectorAll('.answer').forEach(x=>x.classList.remove('selected'));$('confirm').disabled=true;$('feedback').textContent='Tente outra alternativa.';$('retry').hidden=true});
  $('status').textContent='Câmera iniciada? Permita o acesso quando o navegador solicitar e mostre os marcadores de código de barras.';
 })();
 </script>
