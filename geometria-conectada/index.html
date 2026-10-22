@@ -11,7 +11,7 @@
 </head>
 <body>
 <header><h1>Geometria Conectada</h1><p>Monte pontos, forme figuras e resolva desafios • Prof. Michel</p></header>
-<div class="topnote">Aponte a câmera para os marcadores de código de barras AR.js.</div>
+<div class="topnote">Aponte a câmera para os marcadores Barcode. Os pontos serão conectados e preenchidos automaticamente.</div>
 <section class="panel">
 <p class="status" id="status">Iniciando câmera e rastreamento de marcadores…</p>
 <div class="row">
@@ -30,7 +30,7 @@
 <div class="row" style="margin-top:8px"><button id="confirm" disabled>Confirmar resposta</button><button class="secondary" id="retry" hidden>Tentar novamente</button></div>
 <div id="feedback" aria-live="polite"></div>
 </div>
-<p class="help">Unidade de medida: centímetros. A escala depende do tamanho físico informado ao rastreador (marcadores de 4 cm). Imprima os marcadores de códigos distintos usando o gerador de barcode do AR.js. Para maior precisão, mantenha a câmera quase perpendicular à mesa e evite sombras e reflexos.</p>
+<p class="help">Unidade de medida: centímetros. A escala depende do tamanho físico informado ao rastreador (marcadores de 4 cm). Use marcadores Barcode distintos e imprima cada cartão com 4 cm de largura. Para maior precisão, mantenha a câmera quase perpendicular à mesa e evite sombras e reflexos.</p>
 <p class="help"><a href="marcadores.html">Abrir guia de marcadores e impressão</a></p>
 </section>
 <a-scene embedded vr-mode-ui="enabled:false" renderer="logarithmicDepthBuffer:true;colorManagement:true" arjs="sourceType:webcam;debugUIEnabled:false;detectionMode:mono_and_matrix;matrixCodeType:3x3" loading-screen="enabled:false">
@@ -53,7 +53,7 @@
  const TOTAL=12, MARKER_SIZE_M=.04;
  const markers=Array.from({length:TOTAL},(_,i)=>({id:i,el:document.getElementById('marker-'+i),visible:false}));
  const $=id=>document.getElementById(id);
- let chosen=null, selectedAnswer=null, correctValue=null, currentFigure=null, lineEntity=null, labelEntity=null;
+ let chosen=null, selectedAnswer=null, correctValue=null, currentFigure=null, lineEntity=null, labelEntity=null, fillEntity=null;
  const scene=document.querySelector('a-scene');
  const labels={triangle:'Triângulo',trapezoid:'Trapézio',square:'Quadrado',rhombus:'Losango',circle:'Círculo'};
  markers.forEach(m=>{
@@ -69,21 +69,41 @@
    if(visible.length<need)return null;
    return visible.map(m=>({id:m.id,p:worldPos(m)}));
  }
- function clearOverlay(){if(lineEntity){lineEntity.remove();lineEntity=null}if(labelEntity){labelEntity.remove();labelEntity=null}}
+ function clearOverlay(){if(lineEntity){lineEntity.remove();lineEntity=null}if(labelEntity){labelEntity.remove();labelEntity=null}if(fillEntity){fillEntity.remove();fillEntity=null}}
  function makeLine(points,closed){
    clearOverlay();
+   // Preenchimento azul semitransparente, semelhante à referência visual.
+   if(closed&&points.length>=3){
+     const shape=new THREE.Shape();
+     shape.moveTo(points[0].p.x,-points[0].p.z);
+     points.slice(1).forEach(v=>shape.lineTo(v.p.x,-v.p.z));
+     shape.closePath();
+     const geometry=new THREE.ShapeGeometry(shape);
+     geometry.rotateX(-Math.PI/2);
+     const material=new THREE.MeshBasicMaterial({color:0x172cff,transparent:true,opacity:.82,side:THREE.DoubleSide,depthTest:false,depthWrite:false});
+     const fillMesh=new THREE.Mesh(geometry,material);fillMesh.renderOrder=997;
+     fillEntity=document.createElement('a-entity');fillEntity.setObject3D('mesh',fillMesh);scene.appendChild(fillEntity);
+   }
    const vertices=[];
-   points.forEach(v=>vertices.push(v.p.x,v.p.y,v.p.z));
-   if(closed&&points.length>2)vertices.push(points[0].p.x,points[0].p.y,points[0].p.z);
+   points.forEach(v=>vertices.push(v.p.x,v.p.y+.004,v.p.z));
+   if(closed&&points.length>2)vertices.push(points[0].p.x,points[0].p.y+.004,points[0].p.z);
    const geom=new THREE.BufferGeometry();geom.setAttribute('position',new THREE.Float32BufferAttribute(vertices,3));
-   const mesh=new THREE.Line(geom,new THREE.LineBasicMaterial({color:0x38bdf8,linewidth:4,depthTest:false}));
+   const mesh=new THREE.Line(geom,new THREE.LineBasicMaterial({color:0x22c55e,linewidth:4,depthTest:false}));
    mesh.renderOrder=999;lineEntity=document.createElement('a-entity');lineEntity.setObject3D('mesh',mesh);scene.appendChild(lineEntity);
    labelEntity=document.createElement('a-entity');scene.appendChild(labelEntity);
    points.forEach((v,i)=>{
-     const next=points[(i+1)%points.length];if(!next||(!closed&&i===points.length-1))return;
-     const mid=new THREE.Vector3((v.p.x+next.p.x)/2,(v.p.y+next.p.y)/2+.012,(v.p.z+next.p.z)/2);
-     const len=distance2D(v.p,next.p);
-     const t=document.createElement('a-entity');t.setAttribute('position',mid);t.setAttribute('text',{value:len.toFixed(1)+' cm',align:'center',color:'#ffffff',width:1.4,side:'double'});labelEntity.appendChild(t);
+     const next=points[(i+1)%points.length];
+     if(next&&(closed||i<points.length-1)){
+       const mid=new THREE.Vector3((v.p.x+next.p.x)/2,(v.p.y+next.p.y)/2+.018,(v.p.z+next.p.z)/2);
+       const len=distance2D(v.p,next.p);
+       const t=document.createElement('a-entity');t.setAttribute('position',mid);
+       t.setAttribute('text',{value:len.toFixed(1).replace('.',',')+' cm',align:'center',color:'#ffe600',width:1.6,side:'double',shader:'msdf',zOffset:.02});
+       labelEntity.appendChild(t);
+     }
+     const vertexLabel=document.createElement('a-entity');
+     vertexLabel.setAttribute('position',{x:v.p.x,y:v.p.y+.035,z:v.p.z});
+     vertexLabel.setAttribute('text',{value:String.fromCharCode(65+i),align:'center',color:'#ffffff',width:.7,side:'double',outlineColor:'#111827',outlineWidth:.08});
+     labelEntity.appendChild(vertexLabel);
    });
  }
  function calc(points,shape){
