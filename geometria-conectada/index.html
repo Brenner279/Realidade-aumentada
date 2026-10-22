@@ -72,38 +72,48 @@
  function clearOverlay(){if(lineEntity){lineEntity.remove();lineEntity=null}if(labelEntity){labelEntity.remove();labelEntity=null}if(fillEntity){fillEntity.remove();fillEntity=null}}
  function makeLine(points,closed){
    clearOverlay();
-   // Preenchimento azul semitransparente, semelhante à referência visual.
+   // Todos os vértices são desenhados nas coordenadas globais estimadas pelo AR.js.
+   // Triangulação em leque no plano XZ: mais previsível que ShapeGeometry rotacionada.
    if(closed&&points.length>=3){
-     const shape=new THREE.Shape();
-     shape.moveTo(points[0].p.x,-points[0].p.z);
-     points.slice(1).forEach(v=>shape.lineTo(v.p.x,-v.p.z));
-     shape.closePath();
-     const geometry=new THREE.ShapeGeometry(shape);
-     geometry.rotateX(-Math.PI/2);
-     const material=new THREE.MeshBasicMaterial({color:0x172cff,transparent:true,opacity:.82,side:THREE.DoubleSide,depthTest:false,depthWrite:false});
-     const fillMesh=new THREE.Mesh(geometry,material);fillMesh.renderOrder=997;
-     fillEntity=document.createElement('a-entity');fillEntity.setObject3D('mesh',fillMesh);scene.appendChild(fillEntity);
+     const verts=[];
+     const p0=points[0].p;
+     for(let i=1;i<points.length-1;i++){
+       const p1=points[i].p,p2=points[i+1].p;
+       verts.push(p0.x,p0.y+.006,p0.z,p1.x,p1.y+.006,p1.z,p2.x,p2.y+.006,p2.z);
+     }
+     const geometry=new THREE.BufferGeometry();
+     geometry.setAttribute('position',new THREE.Float32BufferAttribute(verts,3));
+     geometry.computeVertexNormals();
+     const material=new THREE.MeshBasicMaterial({color:0x173bff,side:THREE.DoubleSide,transparent:true,opacity:.88,depthTest:false,depthWrite:false});
+     const mesh=new THREE.Mesh(geometry,material);mesh.renderOrder=997;
+     fillEntity=document.createElement('a-entity');fillEntity.setObject3D('mesh',mesh);scene.appendChild(fillEntity);
    }
    const vertices=[];
-   points.forEach(v=>vertices.push(v.p.x,v.p.y+.004,v.p.z));
-   if(closed&&points.length>2)vertices.push(points[0].p.x,points[0].p.y+.004,points[0].p.z);
+   points.forEach(v=>vertices.push(v.p.x,v.p.y+.012,v.p.z));
+   if(closed&&points.length>2)vertices.push(points[0].p.x,points[0].p.y+.012,points[0].p.z);
    const geom=new THREE.BufferGeometry();geom.setAttribute('position',new THREE.Float32BufferAttribute(vertices,3));
-   const mesh=new THREE.Line(geom,new THREE.LineBasicMaterial({color:0x22c55e,linewidth:4,depthTest:false}));
+   const mesh=new THREE.Line(geom,new THREE.LineBasicMaterial({color:0x22ee55,linewidth:4,depthTest:false}));
    mesh.renderOrder=999;lineEntity=document.createElement('a-entity');lineEntity.setObject3D('mesh',mesh);scene.appendChild(lineEntity);
    labelEntity=document.createElement('a-entity');scene.appendChild(labelEntity);
    points.forEach((v,i)=>{
+     // Ponto circular visível em cada vértice (raio de 1,2 cm).
+     const dot=document.createElement('a-entity');
+     dot.setAttribute('position',{x:v.p.x,y:v.p.y+.016,z:v.p.z});
+     dot.setAttribute('geometry',{primitive:'sphere',radius:.012});
+     dot.setAttribute('material',{color:'#ffffff',emissive:'#ffffff',shader:'standard',depthTest:false});
+     dot.setAttribute('scale','1 1 1');dot.object3D.renderOrder=1001;labelEntity.appendChild(dot);
      const next=points[(i+1)%points.length];
      if(next&&(closed||i<points.length-1)){
-       const mid=new THREE.Vector3((v.p.x+next.p.x)/2,(v.p.y+next.p.y)/2+.018,(v.p.z+next.p.z)/2);
+       const mid=new THREE.Vector3((v.p.x+next.p.x)/2,(v.p.y+next.p.y)/2+.025,(v.p.z+next.p.z)/2);
        const len=distance2D(v.p,next.p);
        const t=document.createElement('a-entity');t.setAttribute('position',mid);
-       t.setAttribute('text',{value:len.toFixed(1).replace('.',',')+' cm',align:'center',color:'#ffe600',width:1.6,side:'double',shader:'msdf',zOffset:.02});
-       labelEntity.appendChild(t);
+       t.setAttribute('text',{value:len.toFixed(1).replace('.',',')+' cm',align:'center',color:'#ffe600',width:2.2,side:'double',shader:'msdf',zOffset:.03});
+       t.setAttribute('scale','1.5 1.5 1.5');labelEntity.appendChild(t);
      }
      const vertexLabel=document.createElement('a-entity');
-     vertexLabel.setAttribute('position',{x:v.p.x,y:v.p.y+.035,z:v.p.z});
-     vertexLabel.setAttribute('text',{value:String.fromCharCode(65+i),align:'center',color:'#ffffff',width:.7,side:'double',outlineColor:'#111827',outlineWidth:.08});
-     labelEntity.appendChild(vertexLabel);
+     vertexLabel.setAttribute('position',{x:v.p.x,y:v.p.y+.045,z:v.p.z});
+     vertexLabel.setAttribute('text',{value:String.fromCharCode(65+i),align:'center',color:'#ffffff',width:1.0,side:'double',outlineColor:'#111827',outlineWidth:.12,zOffset:.04});
+     vertexLabel.setAttribute('scale','1.5 1.5 1.5');labelEntity.appendChild(vertexLabel);
    });
  }
  function calc(points,shape){
