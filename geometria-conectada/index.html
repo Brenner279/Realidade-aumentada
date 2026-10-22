@@ -6,11 +6,11 @@
 <script src="https://aframe.io/releases/1.6.0/aframe.min.js"></script>
 <script src="https://cdn.jsdelivr.net/gh/AR-js-org/AR.js@3.4.7/aframe/build/aframe-ar.js"></script>
 <style>
-:root{font-family:system-ui,-apple-system,Segoe UI,sans-serif;color:#f8fafc;background:#0f172a;color-scheme:dark}*{box-sizing:border-box}body{margin:0}header{position:fixed;z-index:5;top:0;left:0;right:0;padding:12px 16px;background:#0f172aeF;border-bottom:1px solid #334155}h1{font-size:clamp(1.1rem,4vw,1.5rem);margin:0;color:#7dd3fc}header p{margin:3px 0 0;font-size:.82rem;color:#cbd5e1}.panel{position:fixed;z-index:5;left:10px;right:10px;bottom:10px;max-height:68vh;overflow:auto;background:#111d30f5;border:1px solid #475569;border-radius:16px;padding:14px;box-shadow:0 8px 28px #0008}.row{display:flex;gap:8px;flex-wrap:wrap;align-items:center}.field{display:flex;flex-direction:column;gap:5px;flex:1;min-width:140px}label{font-size:.82rem;color:#cbd5e1}select,input{width:100%;padding:10px;border-radius:9px;border:1px solid #475569;background:#0f172a;color:#fff}button{border:0;border-radius:10px;background:#0284c7;color:#fff;padding:11px 13px;font-weight:700;cursor:pointer;min-height:42px}button.secondary{background:#334155}button:disabled{opacity:.45;cursor:not-allowed}.status{font-size:.82rem;margin:0 0 8px;color:#fde68a}.status.ok{color:#86efac}.formula{background:#1e293b;border-radius:10px;padding:10px;margin:10px 0;font-size:.9rem}.answers{display:grid;grid-template-columns:1fr 1fr;gap:7px;margin-top:8px}.answer{border:1px solid #475569;background:#172337;text-align:left}.answer.selected{outline:2px solid #38bdf8;background:#075985}.feedback{padding:10px;border-radius:9px;margin-top:8px;font-size:.9rem}.help{font-size:.75rem;line-height:1.4;color:#cbd5e1;margin:9px 0 0}.tiny{font-size:.75rem;color:#cbd5e1}#readout{font-size:.88rem;line-height:1.5}a{color:#7dd3fc}@media(min-width:850px){.panel{width:390px;right:16px;bottom:16px;max-height:75vh}.topnote{top:82px}}.topnote{position:fixed;z-index:4;top:85px;left:12px;right:12px;text-align:center;text-shadow:0 2px 4px #000;font-size:.8rem;pointer-events:none}
+:root{font-family:Inter,system-ui,-apple-system,Segoe UI,sans-serif;color:#f8fafc;background:#07111f;color-scheme:dark}*{box-sizing:border-box}body{margin:0}header{backdrop-filter:blur(14px);background:linear-gradient(110deg,#07111ff5,#102a43ee);box-shadow:0 8px 30px #0005}h1{letter-spacing:.02em;text-shadow:0 0 22px #38bdf855}.panel{background:linear-gradient(160deg,#101f33f7,#0b1526f5);border-color:#38bdf866;box-shadow:0 14px 40px #0009,0 0 24px #0284c722}button{background:linear-gradient(135deg,#0284c7,#2563eb);box-shadow:0 4px 12px #0284c733;transition:transform .15s,filter .15s}button:hover{filter:brightness(1.12);transform:translateY(-1px)}select{border-color:#3b526c} .formula{border:1px solid #334b68;background:linear-gradient(135deg,#162a43,#101c2e)}.topnote{display:inline-block;left:50%;right:auto;transform:translateX(-50%);width:max-content;max-width:calc(100% - 24px);padding:9px 14px;border:1px solid #7dd3fc66;border-radius:999px;background:#07111fc9;color:#e0f2fe;backdrop-filter:blur(8px)}header{position:fixed;z-index:5;top:0;left:0;right:0;padding:12px 16px;background:#0f172aeF;border-bottom:1px solid #334155}h1{font-size:clamp(1.1rem,4vw,1.5rem);margin:0;color:#7dd3fc}header p{margin:3px 0 0;font-size:.82rem;color:#cbd5e1}.panel{position:fixed;z-index:5;left:10px;right:10px;bottom:10px;max-height:68vh;overflow:auto;background:#111d30f5;border:1px solid #475569;border-radius:16px;padding:14px;box-shadow:0 8px 28px #0008}.row{display:flex;gap:8px;flex-wrap:wrap;align-items:center}.field{display:flex;flex-direction:column;gap:5px;flex:1;min-width:140px}label{font-size:.82rem;color:#cbd5e1}select,input{width:100%;padding:10px;border-radius:9px;border:1px solid #475569;background:#0f172a;color:#fff}button{border:0;border-radius:10px;background:#0284c7;color:#fff;padding:11px 13px;font-weight:700;cursor:pointer;min-height:42px}button.secondary{background:#334155}button:disabled{opacity:.45;cursor:not-allowed}.status{font-size:.82rem;margin:0 0 8px;color:#fde68a}.status.ok{color:#86efac}.formula{background:#1e293b;border-radius:10px;padding:10px;margin:10px 0;font-size:.9rem}.answers{display:grid;grid-template-columns:1fr 1fr;gap:7px;margin-top:8px}.answer{border:1px solid #475569;background:#172337;text-align:left}.answer.selected{outline:2px solid #38bdf8;background:#075985}.feedback{padding:10px;border-radius:9px;margin-top:8px;font-size:.9rem}.help{font-size:.75rem;line-height:1.4;color:#cbd5e1;margin:9px 0 0}.tiny{font-size:.75rem;color:#cbd5e1}#readout{font-size:.88rem;line-height:1.5}a{color:#7dd3fc}@media(min-width:850px){.panel{width:390px;right:16px;bottom:16px;max-height:75vh}.topnote{top:82px}}.topnote{position:fixed;z-index:4;top:85px;left:12px;right:12px;text-align:center;text-shadow:0 2px 4px #000;font-size:.8rem;pointer-events:none}
 </style>
 </head>
 <body>
-<header><h1>Geometria Conectada</h1><p>Monte pontos, forme figuras e resolva desafios • Prof. Michel</p></header>
+<header><h1>◈ Geometria Conectada</h1><p>Realidade aumentada • Explore, construa e descubra • Prof. Michel</p></header>
 <div class="topnote">Aponte a câmera para os marcadores Barcode. Os pontos serão conectados e preenchidos automaticamente.</div>
 <section class="panel">
 <p class="status" id="status">Iniciando câmera e rastreamento de marcadores…</p>
@@ -22,8 +22,8 @@
 <div class="field"><label for="task">Desafio matemático</label><select id="task"><option value="area">Área</option><option value="perimeter">Perímetro</option></select></div>
 <button id="build">Montar / atualizar figura</button>
 </div>
-<div class="formula" id="formula">Fórmula: selecione uma figura e monte os pontos.</div>
-<div id="readout">Marcadores reconhecidos: <strong id="count">0</strong> de 12. Posicione os cartões na mesa e mantenha-os visíveis.</div>
+<div class="formula" id="formula">📐 Fórmula: selecione uma figura e monte os pontos.</div>
+<div id="readout">📍 Marcadores reconhecidos: <strong id="count">0</strong> de 12. Posicione os cartões na mesa e mantenha-os visíveis.</div>
 <div id="quiz" hidden>
 <p><strong id="question">Qual é a área da figura?</strong></p>
 <div class="answers" id="answers"></div>
@@ -72,48 +72,51 @@
  function clearOverlay(){if(lineEntity){lineEntity.remove();lineEntity=null}if(labelEntity){labelEntity.remove();labelEntity=null}if(fillEntity){fillEntity.remove();fillEntity=null}}
  function makeLine(points,closed){
    clearOverlay();
-   // Todos os vértices são desenhados nas coordenadas globais estimadas pelo AR.js.
-   // Triangulação em leque no plano XZ: mais previsível que ShapeGeometry rotacionada.
+   // Overlay criado em coordenadas do mundo. A área é triangulada no plano XZ,
+   // usando altura média constante para evitar pequenas diferenças de rastreamento.
    if(closed&&points.length>=3){
+     const center={x:0,z:0,y:0};
+     points.forEach(v=>{center.x+=v.p.x;center.z+=v.p.z;center.y+=v.p.y});
+     center.x/=points.length;center.z/=points.length;center.y=center.y/points.length+.022;
      const verts=[];
-     const p0=points[0].p;
-     for(let i=1;i<points.length-1;i++){
-       const p1=points[i].p,p2=points[i+1].p;
-       verts.push(p0.x,p0.y+.006,p0.z,p1.x,p1.y+.006,p1.z,p2.x,p2.y+.006,p2.z);
+     for(let i=0;i<points.length;i++){
+       const a=points[i].p,b=points[(i+1)%points.length].p;
+       verts.push(center.x,center.y,center.z, a.x,center.y,a.z, b.x,center.y,b.z);
      }
      const geometry=new THREE.BufferGeometry();
      geometry.setAttribute('position',new THREE.Float32BufferAttribute(verts,3));
      geometry.computeVertexNormals();
-     const material=new THREE.MeshBasicMaterial({color:0x173bff,side:THREE.DoubleSide,transparent:true,opacity:.88,depthTest:false,depthWrite:false});
-     const mesh=new THREE.Mesh(geometry,material);mesh.renderOrder=997;
-     fillEntity=document.createElement('a-entity');fillEntity.setObject3D('mesh',mesh);scene.appendChild(fillEntity);
+     const material=new THREE.MeshBasicMaterial({color:0x173bff,side:THREE.DoubleSide,transparent:false,depthTest:false,depthWrite:false,toneMapped:false});
+     const mesh=new THREE.Mesh(geometry,material);mesh.renderOrder=999;
+     fillEntity=document.createElement('a-entity');fillEntity.setObject3D('mesh',mesh);
+     fillEntity.object3D.frustumCulled=false;scene.appendChild(fillEntity);
    }
    const vertices=[];
-   points.forEach(v=>vertices.push(v.p.x,v.p.y+.012,v.p.z));
-   if(closed&&points.length>2)vertices.push(points[0].p.x,points[0].p.y+.012,points[0].p.z);
+   points.forEach(v=>vertices.push(v.p.x,v.p.y+.028,v.p.z));
+   if(closed&&points.length>2)vertices.push(points[0].p.x,points[0].p.y+.028,points[0].p.z);
    const geom=new THREE.BufferGeometry();geom.setAttribute('position',new THREE.Float32BufferAttribute(vertices,3));
-   const mesh=new THREE.Line(geom,new THREE.LineBasicMaterial({color:0x22ee55,linewidth:4,depthTest:false}));
-   mesh.renderOrder=999;lineEntity=document.createElement('a-entity');lineEntity.setObject3D('mesh',mesh);scene.appendChild(lineEntity);
+   const mesh=new THREE.Line(geom,new THREE.LineBasicMaterial({color:0x22ee55,linewidth:4,depthTest:false,toneMapped:false}));
+   mesh.renderOrder=1000;lineEntity=document.createElement('a-entity');lineEntity.setObject3D('mesh',mesh);
+   lineEntity.object3D.frustumCulled=false;scene.appendChild(lineEntity);
    labelEntity=document.createElement('a-entity');scene.appendChild(labelEntity);
    points.forEach((v,i)=>{
-     // Ponto circular visível em cada vértice (raio de 1,2 cm).
      const dot=document.createElement('a-entity');
-     dot.setAttribute('position',{x:v.p.x,y:v.p.y+.016,z:v.p.z});
-     dot.setAttribute('geometry',{primitive:'sphere',radius:.012});
-     dot.setAttribute('material',{color:'#ffffff',emissive:'#ffffff',shader:'standard',depthTest:false});
-     dot.setAttribute('scale','1 1 1');dot.object3D.renderOrder=1001;labelEntity.appendChild(dot);
+     dot.setAttribute('position',{x:v.p.x,y:v.p.y+.035,z:v.p.z});
+     dot.setAttribute('geometry',{primitive:'sphere',radius:.018});
+     dot.setAttribute('material',{color:'#ffffff',emissive:'#ffffff',shader:'flat',depthTest:false,toneMapped:false});
+     dot.object3D.renderOrder=1002;labelEntity.appendChild(dot);
      const next=points[(i+1)%points.length];
      if(next&&(closed||i<points.length-1)){
-       const mid=new THREE.Vector3((v.p.x+next.p.x)/2,(v.p.y+next.p.y)/2+.025,(v.p.z+next.p.z)/2);
+       const mid=new THREE.Vector3((v.p.x+next.p.x)/2,(v.p.y+next.p.y)/2+.055,(v.p.z+next.p.z)/2);
        const len=distance2D(v.p,next.p);
        const t=document.createElement('a-entity');t.setAttribute('position',mid);
-       t.setAttribute('text',{value:len.toFixed(1).replace('.',',')+' cm',align:'center',color:'#ffe600',width:2.2,side:'double',shader:'msdf',zOffset:.03});
-       t.setAttribute('scale','1.5 1.5 1.5');labelEntity.appendChild(t);
+       t.setAttribute('text',{value:len.toFixed(1).replace('.',',')+' cm',align:'center',color:'#ffe600',width:3.0,side:'double',shader:'msdf',zOffset:.06});
+       t.setAttribute('scale','2 2 2');t.object3D.renderOrder=1003;labelEntity.appendChild(t);
      }
      const vertexLabel=document.createElement('a-entity');
-     vertexLabel.setAttribute('position',{x:v.p.x,y:v.p.y+.045,z:v.p.z});
-     vertexLabel.setAttribute('text',{value:String.fromCharCode(65+i),align:'center',color:'#ffffff',width:1.0,side:'double',outlineColor:'#111827',outlineWidth:.12,zOffset:.04});
-     vertexLabel.setAttribute('scale','1.5 1.5 1.5');labelEntity.appendChild(vertexLabel);
+     vertexLabel.setAttribute('position',{x:v.p.x,y:v.p.y+.085,z:v.p.z});
+     vertexLabel.setAttribute('text',{value:String.fromCharCode(65+i),align:'center',color:'#ffffff',width:1.4,side:'double',outlineColor:'#111827',outlineWidth:.16,zOffset:.08});
+     vertexLabel.setAttribute('scale','2 2 2');vertexLabel.object3D.renderOrder=1003;labelEntity.appendChild(vertexLabel);
    });
  }
  function calc(points,shape){
